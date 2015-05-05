@@ -36,7 +36,6 @@ namespace adt {
 
     float* _raw_verts;
 
-    // only for testing/file analysis
     std::vector<int> * _drefs;
     std::vector<int> * _wrefs;
   };

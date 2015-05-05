@@ -33,7 +33,7 @@ namespace adt {
 
   private:
 
-    ADT_FILETYPE _loaded_files;
+    ADT_FILETYPE _loaded_files_mask;
     std::string _name;
 
     int _x, _y;

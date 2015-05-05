@@ -25,6 +25,8 @@ adt::chunk::~chunk() {
   {
     delete[] _raw_verts;
   }
+
+  std::cout << "destroyed chunk: " << _ix << " " << _iy << std::endl;
 }
 
 void adt::chunk::parse_header(SMChunkHeader *hdr) {

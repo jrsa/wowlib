@@ -2,6 +2,7 @@
 #include "../file/file.h"
 #include "../utility.h"
 
+// todo: iostream for debugging only
 #include <iostream>
 #include <exception>
 
@@ -21,13 +22,15 @@ adt::tile::~tile() {
 
   delete _doodads;
   delete _map_objects;
+
+  std::cout << "destroyed tile" << std::endl;
 }
 
 bool adt::tile::load(file& f, ADT_FILETYPE type) {
 
   int magic = 0;
   int size = 0;
-  char * buffer = 0;
+  char *buffer = 0;
   int version = 0;
 
   std::vector<std::string> mdxnames, wmonames;
@@ -38,22 +41,22 @@ bool adt::tile::load(file& f, ADT_FILETYPE type) {
   f.read(&size, 4);
   f.read(&version, 4);
 
-  if (magic != IFFC_VERSION || size != 0x4 || version != 0x12) {
-
+  if (magic != IFFC_VERSION || size != 0x4 || version != 0x12)
+  {
     return false;
   }
 
-  while (true) {
-
-    if(!f.read(&magic, 4)) {
-
+  while (true)
+  {
+    if(!f.read(&magic, 4))
+    {
       break;
     }
 
     f.read(&size, 4);
 
-    switch (magic) {
-
+    switch (magic)
+    {
       case IFF_A_MDXFILES:
 
         buffer = new char[size];
@@ -113,14 +116,14 @@ bool adt::tile::load(file& f, ADT_FILETYPE type) {
     }
   }
 
-  _loaded_files = (ADT_FILETYPE)(_loaded_files | type);
+  _loaded_files_mask = (ADT_FILETYPE)(_loaded_files_mask | type);
   return true;
 }
 
-bool adt::tile::save(file &f, ADT_FILETYPE type) {
-
-  if(!f.is_open()) {
-
+bool adt::tile::save(file &f, ADT_FILETYPE type)
+{
+  if(!f.is_open())
+  {
     return false;
   }
 
@@ -128,28 +131,30 @@ bool adt::tile::save(file &f, ADT_FILETYPE type) {
   int size = 0x4;
   int version = 0x12;
 
-  if(!f.write((char *)&magic, 4)) {
-
-    return false;
-  }
-
+  f.write((char *)&magic, 4);
   f.write((char *)&size, 4);
   f.write((char *)&version, 4);
 
-  if(type == ADT_OBJ_FILE) {
+  if(type == ADT_OBJ_FILE)
+  {
+    std::cerr << "saving object file not implemented" << std::endl;
 
-    // not yet implemented
+    // write filenames
+    // write id's
+    // write entries
+
     return false;
   }
 
   if(type == ADT_BASE_FILE) {
 
-    for (int i=0; i <= 256; i++) {
+    for (int i=0; i < 255; i++) {
 
       _chunk[i/16][i%16].save(f, ADT_BASE_FILE);
     }
+    // todo: save flightbox
   }
-  return true;
+  return false;
 }
 
 const adt::chunk& adt::tile::get_chunk(int idx) const {

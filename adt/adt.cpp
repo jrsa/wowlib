@@ -97,15 +97,11 @@ bool adt::tile::load(file& f, ADT_FILETYPE type) {
 
       case IFF_A_CHUNK:
 
-        for (int i = 0; i < 16; ++i) {
-          for (int j = 0; j < 16; ++j) {
+        for (int i = 0; i < 255; ++i)
+          _chunks[i].load(f, size, type);
 
-            _chunk[i][j].load(f, size, type);
-
-            f.read(&magic, 4);
-            f.read(&size, 4);
-          }
-        }
+        f.read(&magic, 4);
+        f.read(&size, 4);
 
         break;
 
@@ -150,20 +146,21 @@ bool adt::tile::save(file &f, ADT_FILETYPE type)
 
     for (int i=0; i < 255; i++) {
 
-      _chunk[i/16][i%16].save(f, ADT_BASE_FILE);
+      _chunks[i].save(f, ADT_BASE_FILE);
     }
     // todo: save flightbox
   }
   return false;
 }
 
-const adt::chunk& adt::tile::get_chunk(int idx) const {
+std::vector<adt::chunk>::iterator adt::tile::first_chunk()
+{
+  return _chunks.begin();
+}
 
-  // todo: debug
-  std::cout << "getting chunk " << idx;
-  std::cout << ", " << idx/16 << " " << idx%16 << std::endl;
-
-  return _chunk[idx/16][idx%16];
+std::vector<adt::chunk>::iterator adt::tile::last_chunk()
+{
+  return _chunks.end();
 }
 
 std::vector<std::string> adt::tile::map_object_names()

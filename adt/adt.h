@@ -11,9 +11,6 @@
 class file;
 
 namespace adt {
-  // class map; (contains WDT data)
-
-  class chunk; // chunk.h
 
   class tile {
 
@@ -26,7 +23,8 @@ namespace adt {
     bool load(file&, ADT_FILETYPE);
     bool save(file&, ADT_FILETYPE);
 
-    const adt::chunk& get_chunk(int) const;
+    std::vector<chunk>::iterator first_chunk();
+    std::vector<chunk>::iterator last_chunk();
 
     std::vector<std::string> map_object_names();
     std::vector<std::string> doodad_names();
@@ -44,13 +42,13 @@ namespace adt {
     std::vector<SMODoodadDef> _v_doodads;
     std::vector<SMOMapObjDef> _v_map_objs;
 
+    std::vector<chunk> _chunks;
+
     SMODoodadDef * _doodads;
     int _doodad_count;
 
     SMOMapObjDef * _map_objects;
     int _map_obj_count;
-
-    chunk _chunk[16][16];
   };
 }
 

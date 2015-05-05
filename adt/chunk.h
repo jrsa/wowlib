@@ -35,9 +35,6 @@ namespace adt {
     uint32_t hole_flags;
 
     float* _raw_verts;
-
-    std::vector<int> * _drefs;
-    std::vector<int> * _wrefs;
   };
 }
 

@@ -4,22 +4,10 @@
 // todo: for debug only
 #include <iostream>
 
-adt::chunk::chunk(): _drefs(nullptr), _wrefs(nullptr), _raw_verts(nullptr) {
-  // todo: for debug only
-  std::cout << "new chunk created" << std::endl;
+adt::chunk::chunk(): _raw_verts(nullptr) {
 }
 
 adt::chunk::~chunk() {
-
-  if(_drefs)
-  {
-    delete _drefs;
-  }
-
-  if(_wrefs)
-  {
-    delete _wrefs;
-  }
 
   if(_raw_verts)
   {
@@ -53,6 +41,9 @@ void adt::chunk::load(file &f, int size, ADT_FILETYPE type) {
   int sub_size = 0;
   int sub_idx = 0;
 
+  std::vector<int> doodad_ids;
+  std::vector<int> object_ids;
+
   if(type == ADT_BASE_FILE) {
 
     SMChunkHeader * header = new SMChunkHeader;
@@ -83,8 +74,8 @@ void adt::chunk::load(file &f, int size, ADT_FILETYPE type) {
         int *i_drefs = new int[dref_count];
         f.read((char *)i_drefs, 4 * dref_count);
 
-        _drefs = new std::vector<int>(i_drefs, &i_drefs[dref_count]);
-
+        doodad_ids = std::vector<int>(i_drefs, &i_drefs[dref_count]);
+        delete[] i_drefs;
         break;
       }
 
@@ -95,8 +86,8 @@ void adt::chunk::load(file &f, int size, ADT_FILETYPE type) {
         int *i_wrefs = new int[wref_count];
         f.read((char *)i_wrefs, 4 * wref_count);
 
-        _wrefs = new std::vector<int>(i_wrefs, &i_wrefs[wref_count]);
-
+        object_ids = std::vector<int>(i_wrefs, &i_wrefs[wref_count]);
+        delete[] i_wrefs;
         break;
       }
 
@@ -115,6 +106,15 @@ void adt::chunk::load(file &f, int size, ADT_FILETYPE type) {
         break;
       }
     }
+  }
+
+  std::cout << "doodad ids in chunk ";
+  std::cout << this->_ix << " " << this->_iy << " ";
+
+  for (std::vector<int>::iterator i = doodad_ids.begin();
+        i != doodad_ids.end(); ++i)
+  {
+    std::cout << *i << " ";
   }
 }
 

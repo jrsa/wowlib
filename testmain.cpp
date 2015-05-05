@@ -18,20 +18,5 @@ int main(int argc, char const *argv[])
   t1.load (t1_base, ADT_BASE_FILE);
   t1.load (t1_obj, ADT_OBJ_FILE);
 
-  adt::chunk c;
-
-  for(int i = 0; i <= 256; ++i)
-  {
-    std::cout << "logging vertices for chunk " << i << std::endl;
-    c = t1.get_chunk(i);
-
-    for(int j = 0; j <= 145; ++j)
-    {
-      std::cout << c.raw_verts()[j] << " ";
-    }
-
-    std::cout << std::endl;
-  }
-
   return 0;
 }

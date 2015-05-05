@@ -7,6 +7,7 @@
 
 class file {
 
+protected:
   std::string path;
 
 public:

@@ -4,19 +4,6 @@
 // todo: for debug only
 #include <iostream>
 
-adt::chunk::chunk(): _raw_verts(nullptr) {
-}
-
-adt::chunk::~chunk() {
-
-  if(_raw_verts)
-  {
-    delete[] _raw_verts;
-  }
-
-  std::cout << "destroyed chunk: " << _ix << " " << _iy << std::endl;
-}
-
 void adt::chunk::parse_header(SMChunkHeader *hdr) {
 
   if(!hdr) {
@@ -30,9 +17,19 @@ void adt::chunk::parse_header(SMChunkHeader *hdr) {
   _py = hdr->y;
   _pz = hdr->z;
 
-  hole_flags = hdr->holes;
+  _hole_flags = hdr->holes;
   _flags = hdr->flags;
   _area_id = hdr->area_id;
+}
+
+adt::chunk::chunk()
+{
+
+}
+
+adt::chunk::chunk(file &f, int size, ADT_FILETYPE type)
+{
+  load(f, size, type);
 }
 
 void adt::chunk::load(file &f, int size, ADT_FILETYPE type) {
@@ -49,6 +46,7 @@ void adt::chunk::load(file &f, int size, ADT_FILETYPE type) {
     SMChunkHeader * header = new SMChunkHeader;
     f.read((char *)header, sizeof(SMChunkHeader));
     parse_header(header);
+    delete header;
     sub_idx += sizeof(SMChunkHeader);
   }
 
@@ -63,7 +61,7 @@ void adt::chunk::load(file &f, int size, ADT_FILETYPE type) {
 
       case IFF_A_CHUNK: {
 
-        throw new std::runtime_error("adt file misread");
+        throw std::runtime_error("adt file misread");
         break;
       }
 
@@ -93,8 +91,12 @@ void adt::chunk::load(file &f, int size, ADT_FILETYPE type) {
 
       case IFF_C_VERTS: {
 
-        _raw_verts = new float[C_VERT_COUNT];
-        f.read((char *)_raw_verts, 4 * C_VERT_COUNT);
+        float* heightmap = new float[C_VERT_COUNT];
+        f.read((char *)heightmap, 4 * C_VERT_COUNT);
+
+        // parse verts
+
+        delete[] heightmap;
 
         break;
       }
@@ -108,13 +110,30 @@ void adt::chunk::load(file &f, int size, ADT_FILETYPE type) {
     }
   }
 
-  std::cout << "doodad ids in chunk ";
-  std::cout << this->_ix << " " << this->_iy << " ";
-
-  for (std::vector<int>::iterator i = doodad_ids.begin();
-        i != doodad_ids.end(); ++i)
+  if (!doodad_ids.empty())
   {
-    std::cout << *i << " ";
+    std::cout << "doodad ids in chunk ";
+    std::cout << this->_ix << " " << this->_iy << " ";
+
+    for (std::vector<int>::iterator i = doodad_ids.begin();
+          i != doodad_ids.end(); ++i)
+    {
+      std::cout << *i << " ";
+    }
+
+    std::cout << std::endl;
+  }
+
+  if (!object_ids.empty())
+  {
+    std::cout << std::endl << "obj ids: ";
+
+    for (std::vector<int>::iterator i = object_ids.begin(); i != object_ids.end(); ++i)
+    {
+      std::cout << *i << " ";
+    }
+
+    std::cout << std::endl;
   }
 }
 
@@ -122,10 +141,3 @@ bool adt::chunk::save(file &f, ADT_FILETYPE type) const {
 
   return true;
 }
-
-
-float* adt::chunk::raw_verts() const {
-
-  return _raw_verts;
-}
-

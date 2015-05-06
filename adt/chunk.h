@@ -14,17 +14,11 @@ namespace adt {
   public:
 
     chunk();
-    chunk(int x, int y);
-
-    ~chunk();
+    chunk(file&, int size, ADT_FILETYPE);
 
     void load(file&, int size, ADT_FILETYPE);
-
     void parse_header(SMChunkHeader * hdr);
-
     bool save(file &f, ADT_FILETYPE) const;
-
-    float* raw_verts() const;
 
   private:
     float _px, _py, _pz;
@@ -32,9 +26,9 @@ namespace adt {
 
     int _area_id;
     SMChunkFlags _flags;
-    uint32_t hole_flags;
+    uint32_t _hole_flags;
 
-    float* _raw_verts;
+    std::vector<vertex> vertexes;
   };
 }
 

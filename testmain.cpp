@@ -15,8 +15,15 @@ int main(int argc, char const *argv[])
   local_file t1_base ("/Users/jrsa/Desktop/test files/Azeroth_32_48.adt");
   local_file t1_obj ("/Users/jrsa/Desktop/test files/Azeroth_32_48_obj0.adt");
 
-  t1.load (t1_base, ADT_BASE_FILE);
-  t1.load (t1_obj, ADT_OBJ_FILE);
+  try
+  {
+    t1.load (t1_base, ADT_BASE_FILE);
+    t1.load (t1_obj, ADT_OBJ_FILE);
+  }
+  catch (std::runtime_error e)
+  {
+    std::cerr << "error: " << e.what() << std::endl;
+  }
 
   return 0;
 }

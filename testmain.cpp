@@ -12,8 +12,8 @@ int main(int argc, char const *argv[])
 
   adt::tile t1 (map_name, x_index, y_index);
 
-  local_file t1_base ("/Users/jrsa/Desktop/test files/Azeroth_32_48.adt");
-  local_file t1_obj ("/Users/jrsa/Desktop/test files/Azeroth_32_48_obj0.adt");
+  local_file t1_base ("../test files/Azeroth_32_48.adt");
+  local_file t1_obj ("../test files/Azeroth_32_48_obj0.adt");
 
   try
   {

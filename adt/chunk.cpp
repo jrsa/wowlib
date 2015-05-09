@@ -24,7 +24,6 @@ void adt::chunk::parse_header(SMChunkHeader *hdr) {
 
 adt::chunk::chunk()
 {
-
 }
 
 adt::chunk::chunk(file &f, int size, ADT_FILETYPE type)
@@ -94,7 +93,6 @@ void adt::chunk::load(file &f, int size, ADT_FILETYPE type) {
         float* heightmap = new float[C_VERT_COUNT];
         f.read((char *)heightmap, 4 * C_VERT_COUNT);
 
-        // parse verts
 
         delete[] heightmap;
 

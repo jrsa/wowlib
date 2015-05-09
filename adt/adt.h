@@ -10,10 +10,10 @@
 
 class file;
 
-namespace adt {
-
-  class tile {
-
+namespace adt
+{
+  class tile
+  {
   public:
     tile();
     tile(std::string, int, int);

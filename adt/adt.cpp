@@ -6,10 +6,6 @@
 #include <iostream>
 #include <exception>
 
-adt::tile::tile():
-_x(0), _y(0), _doodads(nullptr), _map_objects(nullptr), _doodad_count(0), _map_obj_count(0) {
-
-
 adt::tile::tile():_name("blank tile")
                   , _x(0)
                   , _y(0)
@@ -31,12 +27,10 @@ adt::tile::tile(std::string name, int x, int y):_name(name),_x(x)
 
 }
 
-adt::tile::~tile() {
-
+adt::tile::~tile()
+{
   delete _doodads;
   delete _map_objects;
-
-  std::cout << "destroyed tile" << std::endl;
 }
 
 bool adt::tile::load(file& f, ADT_FILETYPE type) {

@@ -8,9 +8,10 @@
 
 class file;
 
-namespace adt {
-
-  class chunk {
+namespace adt
+{
+  class chunk
+  {
   public:
 
     chunk();

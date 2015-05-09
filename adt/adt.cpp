@@ -113,6 +113,8 @@ bool adt::tile::load(file& f, ADT_FILETYPE type) {
         for (int i = 0; i < 255; ++i)
         {
           _chunks.push_back(chunk(f, size, type));
+          f.read(&magic, 4);
+          f.read(&size, 4);
         }
 
         f.read(&magic, 4);

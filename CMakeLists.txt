@@ -44,13 +44,11 @@ set(util_srcs
 set(srcs
   ${adt_hdrs}
   ${adt_srcs}
-  ${wmo_hdrs}
-  ${wmo_srcs}
   ${file_hdrs}
   ${file_srcs}
   ${util_hdrs}
   ${util_srcs}
-  testmain.cpp
+  tiletest.cpp
 )
 
 add_executable(${target} ${srcs})

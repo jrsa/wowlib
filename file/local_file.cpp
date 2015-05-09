@@ -13,12 +13,6 @@ local_file::local_file(std::string fn) {
   _f_stream = std::fstream(fn, std::ios_base::in | std::ios::out);
 }
 
-local_file::local_file(const local_file& other) {
-
-  std::cerr << "why is a file object being copy-constructed?" << std::endl;
-
-}
-
 local_file& local_file::local_file::operator=(const local_file &rhs) {
 
   _f_stream.copyfmt(rhs._f_stream);

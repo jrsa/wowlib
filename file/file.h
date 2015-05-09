@@ -8,7 +8,7 @@
 class file {
 
 protected:
-  std::string path;
+  std::string _path;
 
 public:
   virtual int read(void* dest, size_t size) =0;
@@ -21,6 +21,11 @@ public:
   virtual bool eof() =0;
 
   virtual int position() =0;
+
+  std::string path()
+  {
+    return _path;
+  }
 };
 
 #endif

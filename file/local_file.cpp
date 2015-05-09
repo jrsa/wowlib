@@ -9,7 +9,7 @@ local_file::local_file() {
 
 local_file::local_file(std::string fn) {
 
-  path = fn;
+  _path = fn;
   _f_stream = std::fstream(fn, std::ios_base::in | std::ios::out);
 }
 
@@ -31,7 +31,7 @@ local_file& local_file::local_file::operator=(const local_file &rhs) {
 local_file::~local_file() {
 
   _f_stream.close();
-  std::cout << "closed/destroyed file: " << path << std::endl;
+  std::cout << "closed/destroyed file: " << _path << std::endl;
 }
 
 int local_file::read(void *dest, size_t length) {

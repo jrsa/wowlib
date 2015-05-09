@@ -33,11 +33,12 @@ int local_file::read(void *dest, size_t length) {
   if(_f_stream && _f_stream.is_open()) {
 
     if (_f_stream.eof()) {
-
+      std::cerr << "tried to read past end of file" << std::endl;
       return 0;
     }
 
     _f_stream.read((char*)dest, length);
+    std::cout << "reading " << length << "B from " << _path << std::endl;
     return (int)length;
   }
 
@@ -59,11 +60,12 @@ int local_file::position() {
 
 void local_file::seek_from_current(size_t s) {
 
+  std::cout << "seek_from_current: " << s << std::endl;
   _f_stream.seekg(s, std::ios::cur);
 }
 
 void local_file::seek_from_beg(size_t s) {
-
+  std::cout << "seek_from_beg: " << s << std::endl;
   _f_stream.seekg(s, std::ios::beg);
 }
 

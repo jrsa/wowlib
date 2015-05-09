@@ -10,11 +10,24 @@ adt::tile::tile():
 _x(0), _y(0), _doodads(nullptr), _map_objects(nullptr), _doodad_count(0), _map_obj_count(0) {
 
 
+adt::tile::tile():_name("blank tile")
+                  , _x(0)
+                  , _y(0)
+                  , _doodads(nullptr)
+                  , _doodad_count(0)
+                  , _map_objects(nullptr)
+                  , _map_obj_count(0)
+{
 }
 
 
-adt::tile::tile(std::string name, int x, int y):
-_x(x), _y(y), _name(name), _doodads(nullptr), _map_objects(nullptr), _doodad_count(0), _map_obj_count(0) {
+adt::tile::tile(std::string name, int x, int y):_name(name),_x(x)
+                                              , _y(y)
+                                              , _doodads(nullptr)
+                                              , _doodad_count(0)
+                                              , _map_objects(nullptr)
+                                              , _map_obj_count(0)
+{
 
 }
 

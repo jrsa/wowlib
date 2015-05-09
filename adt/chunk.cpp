@@ -4,6 +4,11 @@
 // todo: for debug only
 #include <iostream>
 
+vertex adt::chunk::vert_from_heightmap_entry(float h, int idx)
+{
+  return vertex();
+}
+
 void adt::chunk::parse_header(SMChunkHeader *hdr) {
 
   if(!hdr) {
@@ -93,6 +98,10 @@ void adt::chunk::load(file &f, int size, ADT_FILETYPE type) {
         float* heightmap = new float[C_VERT_COUNT];
         f.read((char *)heightmap, 4 * C_VERT_COUNT);
 
+      for(int i = 0; i <= C_VERT_COUNT; ++i)
+      {
+        _vertices.push_back( vert_from_heightmap_entry( heightmap[i], i) );
+      }
 
         delete[] heightmap;
 

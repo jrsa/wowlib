@@ -46,8 +46,6 @@ bool adt::tile::load(file& f, ADT_FILETYPE type) {
   char *buffer = 0;
   int version = 0;
 
-  std::vector<std::string> mdxnames, wmonames;
-
   f.seek_from_beg(0);
 
   f.read(&magic, 4);
@@ -75,7 +73,7 @@ bool adt::tile::load(file& f, ADT_FILETYPE type) {
         buffer = new char[size];
         f.read(buffer, size);
 
-        utility::parse_strings(buffer, size, mdxnames);
+        utility::parse_strings(buffer, size, _doodad_names);
         delete [] buffer;
 
         break;
@@ -85,7 +83,7 @@ bool adt::tile::load(file& f, ADT_FILETYPE type) {
         buffer = new char[size];
         f.read(buffer, size);
 
-        utility::parse_strings(buffer, size, wmonames);
+        utility::parse_strings(buffer, size, _map_object_names);
         delete [] buffer;
 
         break;
@@ -183,4 +181,9 @@ std::vector<adt::chunk>::iterator adt::tile::last_chunk()
 std::vector<std::string> adt::tile::map_object_names()
 {
   return _map_object_names;
+}
+
+std::vector<std::string> adt::tile::doodad_names()
+{
+  return _doodad_names;
 }

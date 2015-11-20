@@ -6,7 +6,7 @@
 
 namespace utility {
 
-	void parse_strings(char* data, int size, std::vector<std::string>& strings);
+void parse_strings(char *data, int size, std::vector<std::string> &strings);
 };
 
 #endif

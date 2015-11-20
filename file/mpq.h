@@ -9,16 +9,16 @@ class mpq_file;
 
 class mpq {
 
-	HANDLE _archive_handle;
+  HANDLE _archive_handle;
 
 public:
-	mpq(std::string);
-	~mpq();
+  mpq(std::string);
+  ~mpq();
 
-	mpq_file open_file(std::string);
+  mpq_file open_file(std::string);
 
   bool alive();
-	void search(std::string, std::vector<std::string>&);
+  void search(std::string, std::vector<std::string> &);
 
   void extract_to_disk(std::string filename, std::string disk_file);
 };

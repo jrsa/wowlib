@@ -7,21 +7,21 @@
 
 // CMapArea (*.adt files)
 
-#define IFF_A_CHUNK     'MCNK' // 0x4D434E4B
-#define IFF_A_MDXFILES  'MMDX' // 0x4D4D4458
-#define IFF_A_WMOFILES  'MWMO' // 0x4D574D4F
-#define IFF_A_DOODDEF   'MDDF' // 0x4D444446
+#define IFF_A_CHUNK 'MCNK'     // 0x4D434E4B
+#define IFF_A_MDXFILES 'MMDX'  // 0x4D4D4458
+#define IFF_A_WMOFILES 'MWMO'  // 0x4D574D4F
+#define IFF_A_DOODDEF 'MDDF'   // 0x4D444446
 #define IFF_A_MAPOBJDEF 'MODF' // 0x4D4F4446
 #define IFF_A_FLIGHTBOX 'MFBO' // 0x4D46424F
 
 // CMapChunk (inside MCNK Section)
 
 #define IFF_C_LAYERS 'MCLY' // 0x4D434C59
-#define IFF_C_REF    'MCRF' // 0x4D435246
-#define IFF_C_WREF   'MCRW' // 0x4D435257
-#define IFF_C_DREF   'MCRD' // 0x4D435244
-#define IFF_C_VERTS  'MCVT' // 0x4D435654
-#define IFF_C_NORMs  'MCNR' // 0x4D434E52
+#define IFF_C_REF 'MCRF'    // 0x4D435246
+#define IFF_C_WREF 'MCRW'   // 0x4D435257
+#define IFF_C_DREF 'MCRD'   // 0x4D435244
+#define IFF_C_VERTS 'MCVT'  // 0x4D435654
+#define IFF_C_NORMs 'MCNR'  // 0x4D434E52
 
 typedef struct {
   float x;
@@ -48,25 +48,25 @@ typedef struct {
   SMChunkFlags flags;
   uint32_t idx_x;
   uint32_t idx_y;
-  uint32_t layer_count;   // need to preserve
-  uint32_t n_drefs;       // zero/not used
-  uint32_t ofs_mcvt;      // write at time of save
-  uint32_t ofs_mcnr;      // write at time of save
-  uint32_t ofs_mcly;      // write at time of save
+  uint32_t layer_count; // need to preserve
+  uint32_t n_drefs;     // zero/not used
+  uint32_t ofs_mcvt;    // write at time of save
+  uint32_t ofs_mcnr;    // write at time of save
+  uint32_t ofs_mcly;    // write at time of save
   uint32_t ofs_mcrf;
-  uint32_t ofs_mcal;      // write at time of save
-  uint32_t alpha_size;    // write at time of save
-  uint32_t mcsh;          // write at time of save
-  uint32_t shadow_size;   // write at time of save
-  uint32_t area_id;       // need to preserve
+  uint32_t ofs_mcal;    // write at time of save
+  uint32_t alpha_size;  // write at time of save
+  uint32_t mcsh;        // write at time of save
+  uint32_t shadow_size; // write at time of save
+  uint32_t area_id;     // need to preserve
   uint32_t n_wrefs;
-  uint32_t holes;         // need to preserve
+  uint32_t holes; // need to preserve
   uint32_t tex[4];
   uint32_t pred_tex;
   uint32_t n_doodad_fx;
-  uint32_t ofs_mcse;      // write at time of save
-  uint32_t count_mcse;    // write at time of save
-  uint32_t ofs_mclq;      // zero/not used
+  uint32_t ofs_mcse;   // write at time of save
+  uint32_t count_mcse; // write at time of save
+  uint32_t ofs_mclq;   // zero/not used
   uint32_t count_mclq;
   float x, y, z;
   uint32_t ofs_mccv;
@@ -103,9 +103,8 @@ typedef struct {
 
 typedef enum {
   ADT_BASE_FILE = 0x1,
-  ADT_OBJ_FILE  = 0x2,
-  ADT_TEX_FILE  = 0x4
+  ADT_OBJ_FILE = 0x2,
+  ADT_TEX_FILE = 0x4
 } ADT_FILETYPE;
-
 
 #endif

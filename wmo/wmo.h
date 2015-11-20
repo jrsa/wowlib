@@ -15,31 +15,29 @@ typedef std::vector<group>::iterator group_itr;
 
 class material {
 private:
-
 public:
   material();
-	material(material_entry);
+  material(material_entry);
 };
 
 class wmo {
-	int version, area_id;
+  int version, area_id;
 
-	std::vector<group>			_groups;
-	std::vector<material>	_materials;
+  std::vector<group> _groups;
+  std::vector<material> _materials;
 
   std::vector<std::string> groupnames, texture_filenames;
 
-  //file* _file;
-  //std::ostream _log;
+  // file* _file;
+  // std::ostream _log;
 
 public:
-	wmo();
-  wmo(file&);
+  wmo();
+  wmo(file &);
 
-  void load(file&);
+  void load(file &);
 
-  group& load_group(int index, file&);
-
+  group &load_group(int index, file &);
 
   group_itr first_group();
   group_itr last_group();
@@ -52,8 +50,7 @@ public:
   // helper to get filenames for each group
   std::string group_filename(int g);
 
-  static void process_filenames(std::string name,
-                                std::string &base,
+  static void process_filenames(std::string name, std::string &base,
                                 std::string &path);
 };
 

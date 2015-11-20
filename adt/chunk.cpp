@@ -4,14 +4,13 @@
 // todo: for debug only
 #include <iostream>
 
-vertex adt::chunk::vert_from_heightmap_entry(float h, int idx)
-{
+vertex adt::chunk::vert_from_heightmap_entry(float h, int idx) {
   return vertex();
 }
 
 void adt::chunk::parse_header(SMChunkHeader *hdr) {
 
-  if(!hdr) {
+  if (!hdr) {
 
     return;
   }
@@ -27,14 +26,9 @@ void adt::chunk::parse_header(SMChunkHeader *hdr) {
   _area_id = hdr->area_id;
 }
 
-adt::chunk::chunk()
-{
-}
+adt::chunk::chunk() {}
 
-adt::chunk::chunk(file &f, int size, ADT_FILETYPE type)
-{
-  load(f, size, type);
-}
+adt::chunk::chunk(file &f, int size, ADT_FILETYPE type) { load(f, size, type); }
 
 void adt::chunk::load(file &f, int size, ADT_FILETYPE type) {
 
@@ -45,98 +39,93 @@ void adt::chunk::load(file &f, int size, ADT_FILETYPE type) {
   std::vector<int> doodad_ids;
   std::vector<int> object_ids;
 
-  if(type == ADT_BASE_FILE) {
+  if (type == ADT_BASE_FILE) {
 
-    SMChunkHeader * header = new SMChunkHeader;
+    SMChunkHeader *header = new SMChunkHeader;
     f.read((char *)header, sizeof(SMChunkHeader));
     parse_header(header);
     delete header;
     sub_idx += sizeof(SMChunkHeader);
   }
 
-  while(sub_idx < size) {
+  while (sub_idx < size) {
 
     f.read(&sub_magic, 4);
     f.read(&sub_size, 4);
 
     sub_idx += (sub_size + 8);
 
-    switch(sub_magic) {
+    switch (sub_magic) {
 
-      case IFF_A_CHUNK: {
+    case IFF_A_CHUNK: {
 
-        throw std::runtime_error("adt file misread");
-        break;
+      throw std::runtime_error("adt file misread");
+      break;
+    }
+
+    case IFF_C_DREF: {
+
+      int dref_count = sub_size / 4;
+
+      int *i_drefs = new int[dref_count];
+      f.read((char *)i_drefs, 4 * dref_count);
+
+      doodad_ids = std::vector<int>(i_drefs, &i_drefs[dref_count]);
+      delete[] i_drefs;
+      break;
+    }
+
+    case IFF_C_WREF: {
+
+      int wref_count = sub_size / 4;
+
+      int *i_wrefs = new int[wref_count];
+      f.read((char *)i_wrefs, 4 * wref_count);
+
+      object_ids = std::vector<int>(i_wrefs, &i_wrefs[wref_count]);
+      delete[] i_wrefs;
+      break;
+    }
+
+    case IFF_C_VERTS: {
+
+      float *heightmap = new float[C_VERT_COUNT];
+      f.read((char *)heightmap, 4 * C_VERT_COUNT);
+
+      for (int i = 0; i <= C_VERT_COUNT; ++i) {
+        _vertices.push_back(vert_from_heightmap_entry(heightmap[i], i));
       }
 
-      case IFF_C_DREF: {
+      delete[] heightmap;
 
-        int dref_count = sub_size / 4;
+      break;
+    }
 
-        int *i_drefs = new int[dref_count];
-        f.read((char *)i_drefs, 4 * dref_count);
+    default: {
 
-        doodad_ids = std::vector<int>(i_drefs, &i_drefs[dref_count]);
-        delete[] i_drefs;
-        break;
-      }
-
-      case IFF_C_WREF: {
-
-        int wref_count = sub_size / 4;
-
-        int *i_wrefs = new int[wref_count];
-        f.read((char *)i_wrefs, 4 * wref_count);
-
-        object_ids = std::vector<int>(i_wrefs, &i_wrefs[wref_count]);
-        delete[] i_wrefs;
-        break;
-      }
-
-      case IFF_C_VERTS: {
-
-        float* heightmap = new float[C_VERT_COUNT];
-        f.read((char *)heightmap, 4 * C_VERT_COUNT);
-
-      for(int i = 0; i <= C_VERT_COUNT; ++i)
-      {
-        _vertices.push_back( vert_from_heightmap_entry( heightmap[i], i) );
-      }
-
-        delete[] heightmap;
-
-        break;
-      }
-
-
-      default: {
-
-        f.seek_from_current(sub_size);
-        break;
-      }
+      f.seek_from_current(sub_size);
+      break;
+    }
     }
   }
 
-  if (!doodad_ids.empty())
-  {
+  if (!doodad_ids.empty()) {
     std::cout << "doodad ids in chunk ";
     std::cout << this->_ix << " " << this->_iy << " ";
 
     for (std::vector<int>::iterator i = doodad_ids.begin();
-          i != doodad_ids.end(); ++i)
-    {
+         i != doodad_ids.end(); ++i) {
       std::cout << *i << " ";
     }
 
     std::cout << std::endl;
   }
 
-  if (!object_ids.empty())
-  {
+  if (!object_ids.empty()) {
     std::cout << std::endl << "obj ids: ";
 
-    for (std::vector<int>::iterator i = object_ids.begin(); i != object_ids.end(); ++i)
-    {
+    for (std::vector<int>::iterator i = object_ids.begin();
+         i != object_ids.end(); ++i) {
       std::cout << *i << " ";
     }
 
@@ -144,7 +133,4 @@ void adt::chunk::load(file &f, int size, ADT_FILETYPE type) {
   }
 }
 
-bool adt::chunk::save(file &f, ADT_FILETYPE type) const {
-
-  return true;
-}
+bool adt::chunk::save(file &f, ADT_FILETYPE type) const { return true; }

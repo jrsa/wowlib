@@ -1,7 +1,7 @@
 #ifndef __ballin_wallhack__mpq__
 #define __ballin_wallhack__mpq__
 
-#include </usr/local/include/StormLib.h>
+#include <StormLib.h>
 #include <string>
 #include <vector>
 

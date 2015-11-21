@@ -1,24 +1,45 @@
 #include <iostream>
+#include <string>
+#include <sstream>
 
 #include "utility.h"
 #include "adt/adt.h"
 #include "file/local_file.h"
 
+using namespace std;
+
+string filename(string dir, string name, int x, int y, ADT_FILETYPE type) {
+  stringstream result;
+  string typetoken;
+
+  switch (type) {
+  case ADT_BASE_FILE:
+    typetoken = string("");
+  case ADT_OBJ_FILE:
+    typetoken = string("_obj0");
+  }
+
+  result << dir << name << "_" << x << "_" << y << typetoken << ".adt";
+  return result.str();
+}
+
 int main(int argc, char const *argv[]) {
-  // std::string maps_dir ("/Users/jrsa/Desktop/test files/world/maps");
-  std::string map_name("Azeroth");
+  string maps_dir("../data/wowassets/wotlk/World/Maps/");
+  string map_name("Azeroth");
   int x_index(32), y_index(48);
 
-  adt::tile t1(map_name, x_index, y_index);
+  wowlib::adt::tile t1(map_name, x_index, y_index);
 
-  local_file t1_base("../test files/Azeroth_32_48.adt");
-  local_file t1_obj("../test files/Azeroth_32_48_obj0.adt");
+  local_file t1_base(
+      filename(maps_dir, map_name, x_index, y_index, ADT_BASE_FILE));
+  local_file t1_obj(
+      filename(maps_dir, map_name, x_index, y_index, ADT_OBJ_FILE));
 
   try {
     t1.load(t1_base, ADT_BASE_FILE);
     t1.load(t1_obj, ADT_OBJ_FILE);
-  } catch (std::runtime_error e) {
-    std::cerr << "error: " << e.what() << std::endl;
+  } catch (runtime_error e) {
+    cerr << "error: " << e.what() << endl;
   }
 
   return 0;

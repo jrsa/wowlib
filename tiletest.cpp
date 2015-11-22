@@ -1,46 +1,34 @@
-#include <iostream>
+#include <glog/logging.h>
 #include <string>
-#include <sstream>
 
-#include "utility.h"
+#define BOOST_FILESYSTEM_NO_DEPRECATED
+#include <boost/filesystem.hpp>
+
 #include "adt/adt.h"
+#include "adt/filename.h"
 #include "file/local_file.h"
 
-using namespace std;
-
-string filename(string dir, string name, int x, int y, ADT_FILETYPE type) {
-  stringstream result;
-  string typetoken;
-
-  switch (type) {
-  case ADT_BASE_FILE:
-    typetoken = string("");
-  case ADT_OBJ_FILE:
-    typetoken = string("_obj0");
-  }
-
-  result << dir << name << "_" << x << "_" << y << typetoken << ".adt";
-  return result.str();
-}
+using namespace wowlib::adt;
+using namespace boost::filesystem;
 
 int main(int argc, char const *argv[]) {
-  string maps_dir("../data/wowassets/wotlk/World/Maps/");
-  string map_name("Azeroth");
-  int x_index(32), y_index(48);
+  google::InitGoogleLogging(argv[0]);
 
-  wowlib::adt::tile t1(map_name, x_index, y_index);
+  std::string map_name("PVPZone05");
+  int x_index(26);
+  int y_index(25);
 
-  local_file t1_base(
-      filename(maps_dir, map_name, x_index, y_index, ADT_BASE_FILE));
-  local_file t1_obj(
-      filename(maps_dir, map_name, x_index, y_index, ADT_OBJ_FILE));
+  tile t1(map_name, x_index, y_index);
 
-  try {
-    t1.load(t1_base, ADT_BASE_FILE);
-    t1.load(t1_obj, ADT_OBJ_FILE);
-  } catch (runtime_error e) {
-    cerr << "error: " << e.what() << endl;
+  path mappath;
+  if (argc == 2) {
+    mappath = path(argv[1]);
+  } else {
+    mappath = path("../data/wowassets/wotlk/World/Maps/");
   }
 
-  return 0;
+  path base(filename(mappath, map_name, x_index, y_index, ADT_BASE_FILE));
+  local_file t1_base(base.string());
+  t1.load(t1_base, ADT_BASE_FILE);
+  return (0);
 }

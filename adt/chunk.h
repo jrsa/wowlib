@@ -8,6 +8,7 @@
 
 class file;
 
+namespace wowlib {
 namespace adt {
 class chunk {
 public:
@@ -26,10 +27,9 @@ private:
   SMChunkFlags _flags;
   uint32_t _hole_flags;
 
-  std::vector<vertex> _vertices;
-
-  vertex vert_from_heightmap_entry(float h, int idx);
+  std::vector<float> _vertices;
 };
+}
 }
 
 #endif

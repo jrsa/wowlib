@@ -185,10 +185,6 @@ group_itr wmo::first_group() { return _groups.begin(); }
 
 group_itr wmo::last_group() { return _groups.end(); }
 
-int wmo::group_count() { return (int)_groups.size(); }
-
-int wmo::mat_count() { return (int)_materials.size(); }
-
 void wmo::process_filenames(std::string name, std::string &base,
                             std::string &path) {
   // hold the split result

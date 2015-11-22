@@ -32,7 +32,6 @@ void group::load(file &f) {
   group_header *hdr = nullptr;
 
   if (!f.is_open()) {
-
     return;
   }
 
@@ -62,12 +61,10 @@ void group::load(file &f) {
   _mogi_flags = hdr->flags;
 
   while (!f.eof()) {
-
     f.read(&token, 4);
     f.read(&size, 4);
 
     switch (token) {
-
     case GRP_VERTICES: {
 
       _geometry = (float *)new char[size];

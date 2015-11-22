@@ -5,11 +5,11 @@
 #include <string>
 
 #include "chunk.h"
-#include "../utility.h"
 #include "format.h"
 
 class file;
 
+namespace wowlib {
 namespace adt {
 class tile {
 public:
@@ -18,8 +18,8 @@ public:
   tile(int, int);
   ~tile();
 
-  bool load(file &, ADT_FILETYPE);
-  bool save(file &, ADT_FILETYPE);
+  void load(file &, ADT_FILETYPE);
+  void save(file &, ADT_FILETYPE);
 
   std::vector<chunk>::iterator first_chunk();
   std::vector<chunk>::iterator last_chunk();
@@ -48,5 +48,5 @@ private:
   int _map_obj_count;
 };
 }
-
+}
 #endif

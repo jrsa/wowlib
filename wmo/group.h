@@ -13,12 +13,12 @@ class file;
 class group {
 
 private:
+  poly_flags *_polygon_flags;
   float *_geometry;
 
   float _bounds0[3];
   float _bounds1[3];
 
-  poly_flags *_polygon_flags;
 
   uint32_t _mogi_flags,
       _name_idx /* name idx is only needed in loading should not be state */;

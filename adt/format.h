@@ -23,12 +23,6 @@
 #define IFF_C_VERTS 'MCVT'  // 0x4D435654
 #define IFF_C_NORMs 'MCNR'  // 0x4D434E52
 
-typedef struct {
-  float x;
-  float y;
-  float z;
-} vertex;
-
 // Data Structures in ADT Files
 
 #define C_VERT_COUNT 145
@@ -99,9 +93,10 @@ typedef struct {
 
 } SMOMapObjDef;
 
-// not a datatype present in the files themselves
+// not present in the files themselves
 
 typedef enum {
+  ADT_NONE = 0x0,
   ADT_BASE_FILE = 0x1,
   ADT_OBJ_FILE = 0x2,
   ADT_TEX_FILE = 0x4

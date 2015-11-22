@@ -42,9 +42,6 @@ public:
   group_itr first_group();
   group_itr last_group();
 
-  // change these to cached vector accessors
-  int group_count(), mat_count(), portal_count();
-
   std::string _base_name;
 
   // helper to get filenames for each group

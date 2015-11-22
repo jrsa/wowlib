@@ -1,8 +1,7 @@
+#include <glog/logging.h>
+
 #include "../file/file.h"
 #include "chunk.h"
-
-// todo: for debug only
-#include <iostream>
 
 namespace wowlib {
 void adt::chunk::parse_header(SMChunkHeader *hdr) {
@@ -52,8 +51,8 @@ void adt::chunk::load(file &f, int size, ADT_FILETYPE type) {
 
     switch (sub_magic) {
     case IFF_A_CHUNK: {
-      throw std::runtime_error("adt file misread");
-      break;
+      LOG(FATAL) << "skipped something, found another MCNK code while looping "
+                    "inside an MCNK";
     }
     case IFF_C_DREF: {
       int dref_count = sub_size / 4;
@@ -88,30 +87,9 @@ void adt::chunk::load(file &f, int size, ADT_FILETYPE type) {
     }
     }
   }
-
-  if (!doodad_ids.empty()) {
-    std::cout << "doodad ids in chunk ";
-    std::cout << this->_ix << " " << this->_iy << " ";
-
-    for (std::vector<int>::iterator i = doodad_ids.begin();
-         i != doodad_ids.end(); ++i) {
-      std::cout << *i << " ";
-    }
-
-    std::cout << std::endl;
-  }
-
-  if (!object_ids.empty()) {
-    std::cout << std::endl << "obj ids: ";
-
-    for (std::vector<int>::iterator i = object_ids.begin();
-         i != object_ids.end(); ++i) {
-      std::cout << *i << " ";
-    }
-
-    std::cout << std::endl;
-  }
 }
 
-bool adt::chunk::save(file &f, ADT_FILETYPE type) const { return true; }
+void adt::chunk::save(file &f, ADT_FILETYPE type) const {
+  LOG(FATAL) << "adt::chunk::save nyi";
+}
 }

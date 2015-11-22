@@ -17,7 +17,7 @@ public:
 
   void load(file &, int size, ADT_FILETYPE);
   void parse_header(SMChunkHeader *hdr);
-  bool save(file &f, ADT_FILETYPE) const;
+  void save(file &f, ADT_FILETYPE) const;
 
 private:
   float _px, _py, _pz;

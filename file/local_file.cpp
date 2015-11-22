@@ -1,4 +1,4 @@
-g#include <glog/logging.h>
+#include <glog/logging.h>
 #include "local_file.h"
 
 local_file::local_file() {}

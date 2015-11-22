@@ -22,7 +22,7 @@ public:
 
   virtual int position() = 0;
 
-  std::string path() { return _path; }
+  virtual std::string path() { return _path; }
 };
 
 #endif

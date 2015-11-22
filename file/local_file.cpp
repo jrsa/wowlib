@@ -8,7 +8,16 @@ local_file::local_file() {}
 local_file::local_file(std::string fn) {
 
   _path = fn;
+  _stripped = boost::filesystem::path(fn).filename().string();
   _f_stream = std::fstream(fn, std::ios_base::in | std::ios::out);
+
+  if (this->is_open()) {
+
+    std::cout << "[" <<_stripped << "] opened" << std::endl;
+  }
+  else if(std::ios::failbit) {
+    std::cerr << "[" <<_stripped << "] couldnt be opened" << std::endl;
+  }
 }
 
 local_file &local_file::local_file::operator=(const local_file &rhs) {
@@ -23,7 +32,7 @@ local_file &local_file::local_file::operator=(const local_file &rhs) {
 local_file::~local_file() {
 
   _f_stream.close();
-  std::cout << "closed/destroyed file: " << _path << std::endl;
+  std::cout << "[" <<_stripped << "] closed" << std::endl;
 }
 
 int local_file::read(void *dest, size_t length) {
@@ -31,12 +40,12 @@ int local_file::read(void *dest, size_t length) {
   if (_f_stream && _f_stream.is_open()) {
 
     if (_f_stream.eof()) {
-      std::cerr << "tried to read past end of file" << std::endl;
+      std::cerr << "[" <<_stripped << "] read past eof" << std::endl;
       return 0;
     }
 
     _f_stream.read((char *)dest, length);
-    std::cout << "reading " << length << "B from " << _path << std::endl;
+    std::cout << "[" <<_stripped << "] reading " << length <<"b" << std::endl;
     return (int)length;
   }
 
@@ -54,12 +63,12 @@ int local_file::position() { return (int)_f_stream.tellg(); }
 
 void local_file::seek_from_current(size_t s) {
 
-  std::cout << "seek_from_current: " << s << std::endl;
+  std::cout << "[" <<_stripped << "] seek forward: " << s << std::endl;
   _f_stream.seekg(s, std::ios::cur);
 }
 
 void local_file::seek_from_beg(size_t s) {
-  std::cout << "seek_from_beg: " << s << std::endl;
+  std::cout << "[" <<_stripped << "] seek from 0: " << s << std::endl;
   _f_stream.seekg(s, std::ios::beg);
 }
 

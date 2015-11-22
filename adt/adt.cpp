@@ -32,6 +32,10 @@ void tile::load(file &f, ADT_FILETYPE type) {
   f.read(&size, 4);
   f.read(&version, 4);
 
+  if (!f.is_open()) {
+    LOG(FATAL) << "tried to load tile from unopened file " << f.path();
+  }
+
   if (magic != IFFC_VERSION || size != 0x4 || version != 0x12) {
     LOG(FATAL) << "invalid adt hdr: " << utility::cc_as_str(magic) << ", "
                << version;

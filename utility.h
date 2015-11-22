@@ -7,6 +7,7 @@
 namespace utility {
 
 void parse_strings(char *data, int size, std::vector<std::string> &strings);
+std::string cc_as_str(int cc);
 };
 
 #endif

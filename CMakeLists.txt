@@ -1,54 +1,29 @@
 cmake_minimum_required (VERSION 2.8)
-
 set(target wltest01)
 
-set(adt_hdrs
-  adt/adt.h
-  adt/chunk.h
-  adt/format.h
+set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
+
+FIND_PACKAGE(Boost COMPONENTS filesystem system REQUIRED)
+
+set(GLOG_LIBRARY "/usr/local/opt/glog/lib/libglog.dylib")
+
+include_directories(
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${Boost_INCLUDE_DIRS}
 )
 
-set(adt_srcs
-  adt/adt.cpp
-  adt/chunk.cpp
-)
-
-set(wmo_hdrs
-  wmo/format.h
-  wmo/group.h
-  wmo/wmo.h
-)
-
-set(wmo_srcs
+set(wmosrcs
   wmo/wmo.cpp
-  wmo/group.cpp
-)
-
-set(file_hdrs
-  file/file.h
-  file/local_file.h
-)
-
-set(file_srcs
-  file/local_file.cpp
-)
-
-set(util_hdrs
-  utility.h
-)
-
-set(util_srcs
-  utility.cpp
-)
+  wmo/group.cpp)
 
 set(srcs
-  ${adt_hdrs}
-  ${adt_srcs}
-  ${file_hdrs}
-  ${file_srcs}
-  ${util_hdrs}
-  ${util_srcs}
+  adt/adt.cpp
+  adt/chunk.cpp
+  adt/filename.cc
+  file/local_file.cpp
+  utility.cpp
   tiletest.cpp
 )
 
 add_executable(${target} ${srcs})
+target_link_libraries(${target} ${Boost_LIBRARIES} ${GLOG_LIBRARY})

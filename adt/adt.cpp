@@ -2,24 +2,24 @@
 #include "../file/file.h"
 #include "../utility.h"
 
-// todo: iostream for debugging only
-#include <iostream>
-#include <exception>
+#include <glog/logging.h>
 
-adt::tile::tile()
+using namespace wowlib::adt;
+
+tile::tile()
     : _name("blank tile"), _x(0), _y(0), _doodads(nullptr), _doodad_count(0),
       _map_objects(nullptr), _map_obj_count(0) {}
 
-adt::tile::tile(std::string name, int x, int y)
+tile::tile(std::string name, int x, int y)
     : _name(name), _x(x), _y(y), _doodads(nullptr), _doodad_count(0),
       _map_objects(nullptr), _map_obj_count(0) {}
 
-adt::tile::~tile() {
+tile::~tile() {
   delete _doodads;
   delete _map_objects;
 }
 
-bool adt::tile::load(file &f, ADT_FILETYPE type) {
+void tile::load(file &f, ADT_FILETYPE type) {
 
   int magic = 0;
   int size = 0;
@@ -33,7 +33,8 @@ bool adt::tile::load(file &f, ADT_FILETYPE type) {
   f.read(&version, 4);
 
   if (magic != IFFC_VERSION || size != 0x4 || version != 0x12) {
-    return false;
+    LOG(FATAL) << "invalid adt hdr: " << utility::cc_as_str(magic) << ", "
+               << version;
   }
 
   while (true) {
@@ -43,8 +44,11 @@ bool adt::tile::load(file &f, ADT_FILETYPE type) {
 
     f.read(&size, 4);
 
+    LOG(INFO) << "found" << utility::cc_as_str(magic) << " with size " << size;
+
     switch (magic) {
     case IFF_A_MDXFILES:
+      LOG(INFO) << "  loading..." << std::endl;
 
       buffer = new char[size];
       f.read(buffer, size);
@@ -55,7 +59,7 @@ bool adt::tile::load(file &f, ADT_FILETYPE type) {
       break;
 
     case IFF_A_WMOFILES:
-
+      LOG(INFO) << "  loading..." << std::endl;
       buffer = new char[size];
       f.read(buffer, size);
 
@@ -65,7 +69,7 @@ bool adt::tile::load(file &f, ADT_FILETYPE type) {
       break;
 
     case IFF_A_DOODDEF:
-
+      LOG(INFO) << "  loading..." << std::endl;
       _doodad_count = size / sizeof(SMODoodadDef);
       buffer = (char *)new SMODoodadDef[_doodad_count];
       f.read(buffer, size);
@@ -74,7 +78,7 @@ bool adt::tile::load(file &f, ADT_FILETYPE type) {
       break;
 
     case IFF_A_MAPOBJDEF:
-
+      LOG(INFO) << "  loading..." << std::endl;
       buffer = (char *)new SMOMapObjDef[_map_obj_count];
       f.read(buffer, size);
       _map_obj_count = size / sizeof(SMOMapObjDef);
@@ -83,15 +87,15 @@ bool adt::tile::load(file &f, ADT_FILETYPE type) {
       break;
 
     case IFF_A_CHUNK:
-
+      LOG(INFO) << "  loading chunks..." << std::endl;
       for (int i = 0; i < 255; ++i) {
         _chunks.push_back(chunk(f, size, type));
         f.read(&magic, 4);
         f.read(&size, 4);
       }
 
-      f.read(&magic, 4);
-      f.read(&size, 4);
+      // f.read(&magic, 4);
+      // f.read(&size, 4);
 
       break;
 
@@ -101,14 +105,12 @@ bool adt::tile::load(file &f, ADT_FILETYPE type) {
       break;
     }
   }
-
   _loaded_files_mask = (ADT_FILETYPE)(_loaded_files_mask | type);
-  return true;
 }
 
-bool adt::tile::save(file &f, ADT_FILETYPE type) {
+void tile::save(file &f, ADT_FILETYPE type) {
   if (!f.is_open()) {
-    return false;
+    LOG(ERROR) << "tried to save tile to an unopened file " << f.path();
   }
 
   int magic = IFFC_VERSION;
@@ -120,36 +122,30 @@ bool adt::tile::save(file &f, ADT_FILETYPE type) {
   f.write((char *)&version, 4);
 
   if (type == ADT_OBJ_FILE) {
-    std::cerr << "saving object file not implemented" << std::endl;
+    LOG(FATAL) << "obj file saving nyi";
 
-    // write filenames
-    // write id's
-    // write entries
-
-    return false;
+    // todo: saving obj
+    //  * filenames
+    //  * id's
+    //  * entries
   }
 
   if (type == ADT_BASE_FILE) {
+    // todo:
+    // * tex
+    // * water
 
     for (int i = 0; i < 255; i++) {
-
       _chunks[i].save(f, ADT_BASE_FILE);
     }
-    // todo: save flightbox
+    // todo: mfbo
   }
-  return false;
 }
 
-std::vector<adt::chunk>::iterator adt::tile::first_chunk() {
-  return _chunks.begin();
-}
+std::vector<chunk>::iterator tile::first_chunk() { return _chunks.begin(); }
 
-std::vector<adt::chunk>::iterator adt::tile::last_chunk() {
-  return _chunks.end();
-}
+std::vector<chunk>::iterator tile::last_chunk() { return _chunks.end(); }
 
-std::vector<std::string> adt::tile::map_object_names() {
-  return _map_object_names;
-}
+std::vector<std::string> tile::map_object_names() { return _map_object_names; }
 
-std::vector<std::string> adt::tile::doodad_names() { return _doodad_names; }
+std::vector<std::string> tile::doodad_names() { return _doodad_names; }

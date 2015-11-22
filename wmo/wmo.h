@@ -4,8 +4,6 @@
 #include <string>
 #include <vector>
 
-#include <iostream>
-
 #include "../file/file.h"
 #include "format.h"
 

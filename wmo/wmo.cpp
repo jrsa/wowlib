@@ -2,6 +2,8 @@
 #include "group.h"
 #include "../utility.h"
 
+#include <glog/logging.h>
+
 #include <iomanip>
 #include <sstream>
 
@@ -32,18 +34,12 @@ void wmo::load(file &f) {
 
   // version check
   if (token != 'MVER') {
-    std::cerr << "found token " << std::hex << token;
-    std::cerr << " instead of " << 'MVER' << " (MVER)" << std::endl;
-    std::cerr << "do not pass go, do not collect $200" << std::endl;
-
-    return;
+    LOG(FATAL) << "found token " << utility::cc_as_str(token)
+               << " instead of (MVER)";
   }
 
   else if (version != 0x11) {
-    std::cerr << "invalid file version " << version;
-    std::cerr << ", expected 17 (0x11)" << std::endl;
-
-    return;
+    LOG(FATAL) << "invalid file version " << version << ", expected 17 (0x11)";
   }
 
   // read data sections
@@ -54,17 +50,16 @@ void wmo::load(file &f) {
     switch (token) {
     case WMO_HEADER: {
       if (size != sizeof(wmo_header)) {
-        std::cout << "invalid header, size is " << size;
-        std::cout << " should be " << sizeof(wmo_header);
-        std::cout << std::endl;
+        LOG(ERROR) << "invalid header, size is " << size;
+        LOG(ERROR) << " should be " << sizeof(wmo_header);
       }
 
       hdr = new wmo_header;
       f.read(hdr, sizeof(wmo_header));
 
-      std::cerr << hdr->group_count << " groups" << std::endl;
-      std::cerr << hdr->mat_count << " materials" << std::endl;
-      std::cerr << hdr->portal_count << " portals" << std::endl;
+      LOG(INFO) << hdr->group_count << " groups";
+      LOG(INFO) << hdr->mat_count << " materials";
+      LOG(INFO) << hdr->portal_count << " portals";
 
       // groups.resize(hdr->group_count);
       // materials.resize(hdr->mat_count);
@@ -103,14 +98,13 @@ void wmo::load(file &f) {
     }
     case WMO_MATERIALS: {
       if (!hdr) {
-        std::cerr << "header should be before materials section" << std::endl;
-        return;
+        LOG(FATAL) << "header must be loaded before materials section";
       }
 
       if (hdr->mat_count != (size / sizeof(material_entry))) {
-        std::cerr << "header indicates " << hdr->mat_count
-                  << " materials but the materials section has "
-                  << size / sizeof(material_entry) << std::endl;
+        LOG(ERROR) << "header indicates " << hdr->mat_count
+                   << " materials but the materials section has "
+                   << size / sizeof(material_entry);
       }
 
       material_entry *data = new material_entry[hdr->mat_count];
@@ -125,15 +119,15 @@ void wmo::load(file &f) {
     }
     case WMO_GROUPINFO: {
       if (!hdr) {
-        std::cerr << "header should be before group info" << std::endl;
+        LOG(ERROR) << "header should be before group info";
         return;
       }
 
       if (hdr->group_count != (size / sizeof(group_info))) {
-        std::cerr << "header indicates " << hdr->group_count;
-        std::cerr << " groups but the group info section has ";
-        std::cerr << size / sizeof(groupnames);
-        std::cerr << std::endl;
+        LOG(ERROR) << "header indicates " << hdr->group_count;
+        LOG(ERROR) << " groups but the group info section has ";
+        LOG(ERROR) << size / sizeof(groupnames);
+        LOG(ERROR);
       }
 
       group_info *data = new group_info[hdr->group_count];

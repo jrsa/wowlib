@@ -1,5 +1,4 @@
 cmake_minimum_required (VERSION 2.8)
-set(target wltest01)
 
 set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
 
@@ -14,16 +13,20 @@ include_directories(
 
 set(wmosrcs
   wmo/wmo.cpp
-  wmo/group.cpp)
+  wmo/group.cpp
+)
 
-set(srcs
+set(adtsrcs
   adt/adt.cpp
   adt/chunk.cpp
   adt/filename.cc
+)
+
+add_executable(tiletest
   file/local_file.cpp
   utility.cpp
   tiletest.cpp
-)
+  ${adtsrcs}
+  )
 
-add_executable(${target} ${srcs})
-target_link_libraries(${target} ${Boost_LIBRARIES} ${GLOG_LIBRARY})
+target_link_libraries(tiletest ${Boost_LIBRARIES} ${GLOG_LIBRARY})

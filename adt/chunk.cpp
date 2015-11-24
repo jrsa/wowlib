@@ -49,10 +49,13 @@ void adt::chunk::load(file &f, int size, ADT_FILETYPE type) {
     f.read(&sub_size, 4);
     sub_idx += (sub_size + 8);
 
+    LOG(INFO) << "found " << utility::cc_as_str(sub_magic) << " with size "
+              << sub_size << " at offset " << sub_idx << " into chunk " << _ix
+              << ", " << _iy;
+
     switch (sub_magic) {
     case IFF_A_CHUNK: {
-      LOG(FATAL) << "skipped something, found another MCNK code while looping "
-                    "inside an MCNK";
+      LOG(FATAL) << "read past end of MCNK: " << sub_idx << "/" << size;
     }
     case IFF_C_DREF: {
       int dref_count = sub_size / 4;

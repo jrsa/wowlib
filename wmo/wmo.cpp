@@ -124,10 +124,9 @@ void wmo::load(file &f) {
       }
 
       if (hdr->group_count != (size / sizeof(group_info))) {
-        LOG(ERROR) << "header indicates " << hdr->group_count;
-        LOG(ERROR) << " groups but the group info section has ";
-        LOG(ERROR) << size / sizeof(groupnames);
-        LOG(ERROR);
+        LOG(ERROR) << "header indicates " << hdr->group_count
+                   << " groups but the group info section has "
+                   << size / sizeof(groupnames);
       }
 
       group_info *data = new group_info[hdr->group_count];
@@ -164,7 +163,7 @@ group &wmo::load_group(int index, file &f) {
 
   if (index > _groups.size()) {
 
-    throw new std::logic_error("out of bounds access in load_group");
+    LOG(FATAL) << "out of bounds access in load_group";
   }
 
   _groups[index].load(f);

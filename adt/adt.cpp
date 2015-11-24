@@ -48,7 +48,7 @@ void tile::load(file &f, ADT_FILETYPE type) {
 
     f.read(&size, 4);
 
-    LOG(INFO) << "found" << utility::cc_as_str(magic) << " with size " << size;
+    LOG(INFO) << "found " << utility::cc_as_str(magic) << " with size " << size;
 
     switch (magic) {
     case IFF_A_MDXFILES:

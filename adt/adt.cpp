@@ -16,7 +16,9 @@ tile::tile(std::string name, int x, int y)
 
 tile::~tile() {
   delete _doodads;
-  delete _map_objects;
+
+  // TODO: why is this broken (crashes with memory error here)
+  // delete _map_objects;
 }
 
 void tile::load(file &f, ADT_FILETYPE type) {

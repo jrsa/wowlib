@@ -83,6 +83,11 @@ void adt::chunk::load(file &f, int size, ADT_FILETYPE type) {
       delete[] heightmap;
       break;
     }
+    case IFF_C_NORMs: {
+      f.seek_from_current(448);
+      sub_idx += 13;
+      break;
+    }
     default: {
 
       f.seek_from_current(sub_size);

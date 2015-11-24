@@ -100,8 +100,8 @@ void tile::load(file &f, ADT_FILETYPE type) {
         f.read(&size, 4);
       }
 
-      // f.read(&magic, 4);
-      // f.read(&size, 4);
+      f.read(&magic, 4);
+      f.read(&size, 4);
 
       break;
 

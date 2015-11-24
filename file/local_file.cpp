@@ -42,8 +42,9 @@ int local_file::read(void *dest, size_t length) {
       return 0;
     }
 
+    LOG(INFO) << "[" << _stripped << "] reading " << length << "b from "
+              << _f_stream.tellg();
     _f_stream.read((char *)dest, length);
-    LOG(INFO) << "[" <<_stripped << "] reading " << length <<"b";
     return (int)length;
   }
 

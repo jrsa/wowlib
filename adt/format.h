@@ -22,6 +22,7 @@
 #define IFF_C_DREF 'MCRD'   // 0x4D435244
 #define IFF_C_VERTS 'MCVT'  // 0x4D435654
 #define IFF_C_NORMs 'MCNR'  // 0x4D434E52
+#define IFF_C_SOUNDEMIT 'MCSE'
 
 // Data Structures in ADT Files
 

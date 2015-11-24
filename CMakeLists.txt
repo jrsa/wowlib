@@ -25,8 +25,17 @@ set(adtsrcs
 add_executable(tiletest
   file/local_file.cpp
   utility.cpp
-  tiletest.cpp
   ${adtsrcs}
+  tiletest.cpp
   )
 
 target_link_libraries(tiletest ${Boost_LIBRARIES} ${GLOG_LIBRARY})
+
+add_executable(wmotest
+  file/local_file.cpp
+  utility.cpp
+  ${wmosrcs}
+  wmotest.cc
+  )
+
+target_link_libraries(wmotest ${Boost_LIBRARIES} ${GLOG_LIBRARY})

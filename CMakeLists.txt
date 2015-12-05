@@ -26,6 +26,7 @@ add_executable(tiletest
   file/local_file.cpp
   utility.cpp
   ${adtsrcs}
+  wdt.cpp
   tiletest.cpp
   )
 

@@ -1,7 +1,7 @@
 #include <glog/logging.h>
 
-#include "../file/file.h"
-#include "chunk.h"
+#include "../file/file.hpp"
+#include "chunk.hpp"
 
 namespace wowlib {
 void adt::chunk::parse_header(SMChunkHeader *hdr) {

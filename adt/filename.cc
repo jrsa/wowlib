@@ -1,4 +1,4 @@
-#include "filename.h"
+#include "filename.hpp"
 
 namespace wowlib {
 namespace adt {

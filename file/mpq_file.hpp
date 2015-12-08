@@ -1,8 +1,8 @@
 #ifndef __ballin_wallhack__mpq_file__
 #define __ballin_wallhack__mpq_file__
 
-#include "file.h"
-#include "mpq.h"
+#include "file.hpp"
+#include "mpq.hpp"
 
 class mpq_file : public file {
 

@@ -1,5 +1,5 @@
-#include "group.h"
-#include "../file/file.h"
+#include "group.hpp"
+#include "../file/file.hpp"
 
 group::group(group_info &data)
     : _geometry(nullptr), _polygon_flags(nullptr), _loaded(false),

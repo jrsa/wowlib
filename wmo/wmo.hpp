@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 
-#include "../file/file.h"
-#include "format.h"
+#include "../file/file.hpp"
+#include "format.hpp"
 
 class group;
 

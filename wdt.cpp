@@ -1,7 +1,7 @@
 #include <glog/logging.h>
 #include <stdint.h>
-#include "wdt.h"
-#include "utility.h"
+#include "wdt.hpp"
+#include "utility.hpp"
 
 typedef struct _SMAreaInfo {
   uint32_t flags;

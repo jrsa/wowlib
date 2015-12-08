@@ -1,5 +1,5 @@
 #include <glog/logging.h>
-#include "local_file.h"
+#include "local_file.hpp"
 
 local_file::local_file() {}
 
@@ -11,10 +11,9 @@ local_file::local_file(std::string fn) {
 
   if (this->is_open()) {
 
-    LOG(INFO) << "[" <<_stripped << "] opened";
-  }
-  else if(std::ios::failbit) {
-    LOG(ERROR) << "[" <<_stripped << "] couldnt be opened";
+    LOG(INFO) << "[" << _stripped << "] opened";
+  } else if (std::ios::failbit) {
+    LOG(ERROR) << "[" << fn << "] couldnt be opened";
   }
 }
 
@@ -30,7 +29,7 @@ local_file &local_file::local_file::operator=(const local_file &rhs) {
 local_file::~local_file() {
 
   _f_stream.close();
-  LOG(INFO) << "[" <<_stripped << "] closed";
+  LOG(INFO) << "[" << _stripped << "] closed";
 }
 
 int local_file::read(void *dest, size_t length) {
@@ -38,7 +37,7 @@ int local_file::read(void *dest, size_t length) {
   if (_f_stream && _f_stream.is_open()) {
 
     if (_f_stream.eof()) {
-      LOG(WARNING) << "[" <<_stripped << "] read past eof";
+      LOG(WARNING) << "[" << _stripped << "] read past eof";
       return 0;
     }
 
@@ -62,12 +61,12 @@ int local_file::position() { return (int)_f_stream.tellg(); }
 
 void local_file::seek_from_current(size_t s) {
 
-  LOG(INFO) << "[" <<_stripped << "] seek forward: " << s;
+  LOG(INFO) << "[" << _stripped << "] seek forward: " << s;
   _f_stream.seekg(s, std::ios::cur);
 }
 
 void local_file::seek_from_beg(size_t s) {
-  LOG(INFO) << "[" <<_stripped << "] seek from 0: " << s;
+  LOG(INFO) << "[" << _stripped << "] seek from 0: " << s;
   _f_stream.seekg(s, std::ios::beg);
 }
 

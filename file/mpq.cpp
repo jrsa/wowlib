@@ -1,5 +1,5 @@
-#include "mpq.h"
-#include "mpq_file.h"
+#include "mpq.hpp"
+#include "mpq_file.hpp"
 
 #include <iostream>
 

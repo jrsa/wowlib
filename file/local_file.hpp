@@ -5,7 +5,7 @@
 
 #define BOOST_FILESYSTEM_NO_DEPRECATED
 #include <boost/filesystem.hpp>
-#include "file.h"
+#include "file.hpp"
 
 class local_file : public file {
 

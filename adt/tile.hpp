@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-#include "chunk.h"
+#include "chunk.hpp"
 #include "format.h"
 
 class file;

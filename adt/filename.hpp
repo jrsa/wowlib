@@ -5,7 +5,7 @@
 #include <boost/filesystem.hpp>
 #include <sstream>
 
-#include "adt.h"
+#include "tile.hpp"
 
 namespace wowlib {
 namespace adt {

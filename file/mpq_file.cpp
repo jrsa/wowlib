@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "mpq_file.h"
+#include "mpq_file.hpp"
 
 mpq_file::mpq_file(mpq &archive, std::string fn, HANDLE handle)
     : _archive(archive), _handle(handle), _eof_bit(false) {

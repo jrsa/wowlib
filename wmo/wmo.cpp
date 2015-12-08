@@ -1,6 +1,6 @@
-#include "wmo.h"
-#include "group.h"
-#include "../utility.h"
+#include "wmo.hpp"
+#include "group.hpp"
+#include "../utility.hpp"
 
 #include <glog/logging.h>
 

@@ -2,7 +2,7 @@
 #include <glog/logging.h>
 #include <boost/filesystem.hpp>
 
-#include "wmo/wmo.h"
+#include "wmo/wmo.hpp"
 
 using namespace boost::filesystem;
 

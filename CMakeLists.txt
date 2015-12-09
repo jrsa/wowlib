@@ -17,7 +17,7 @@ set(wmosrcs
 )
 
 set(adtsrcs
-  adt/adt.cpp
+  adt/tile.cpp
   adt/chunk.cpp
   adt/filename.cc
 )

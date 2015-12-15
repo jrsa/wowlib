@@ -27,9 +27,10 @@ add_executable(tiletest
   utility.cpp
   ${adtsrcs}
   wdt.cpp
-  tiletest.cpp
+  tiletest.mm
   )
 
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -framework AppKit")
 target_link_libraries(tiletest ${Boost_LIBRARIES} ${GLOG_LIBRARY})
 
 add_executable(wmotest

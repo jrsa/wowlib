@@ -1,3 +1,5 @@
+#include <Cocoa/Cocoa.h>
+
 #include <glog/logging.h>
 #include <string>
 
@@ -16,17 +18,18 @@ int main(int argc, char const *argv[]) {
   FLAGS_log_dir = ".";
   google::InitGoogleLogging(argv[0]);
 
-  std::string map_name("PVPZone05");
+  NSOpenPanel* panel = [NSOpenPanel openPanel];
 
-  path mappath;
-  if (argc == 2) {
-    mappath = path(argv[1]);
-  } else {
-    mappath = path("../data/wowassets/wotlk/World/Maps/");
-  }
-
-
+  panel.message = @"select a map folder";
+  panel.canChooseDirectories = YES;
+  panel.canChooseFiles = NO;
+  [panel runModal];
+  
+  path mappath(panel.URLs[0].fileSystemRepresentation);
   path wdtpath(mappath);
+  
+  std::string map_name(mappath.root_path().string());
+  
   std::string wdtname(map_name + ".wdt");
   wdtpath /= map_name;
   wdtpath /= wdtname;
@@ -43,6 +46,7 @@ int main(int argc, char const *argv[]) {
   tile t1(map_name, x_index, y_index);
 
   path base(filename(mappath, map_name, x_index, y_index, ADT_BASE_FILE));
+    
   local_file t1_base(base.string());
   t1.load(t1_base, ADT_BASE_FILE);
   return (0);

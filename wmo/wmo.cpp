@@ -75,6 +75,7 @@ void wmo::load(file &f) {
 
         delete[] name;
       }
+      break;
     }
     case WMO_GROUPNAME: {
       char *data = new char[size];
@@ -136,7 +137,7 @@ void wmo::load(file &f) {
         group_info gi = data[i];
 
         group g(gi);
-        //          g.setName(groupnames[gi.name_idx]);
+        g.setName(groupnames[i]);
         _groups.push_back(g);
       }
 

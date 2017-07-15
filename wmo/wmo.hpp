@@ -6,8 +6,7 @@
 
 #include "../file/file.hpp"
 #include "format.hpp"
-
-class group;
+#include "group.hpp"
 
 typedef std::vector<group>::iterator group_itr;
 

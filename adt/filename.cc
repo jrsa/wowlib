@@ -22,7 +22,7 @@ namespace adt {
   fn << name << "_" << x << "_" << y << typetoken << ".adt";
 
   boost::filesystem::path result;
-  result /= dir /= name;
+  result /= dir;
   result /= boost::filesystem::path(fn.str());
   return result;
 }

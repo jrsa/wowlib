@@ -33,6 +33,23 @@ add_executable(tiletest
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -framework AppKit")
 target_link_libraries(tiletest ${Boost_LIBRARIES} ${GLOG_LIBRARY})
 
+add_library(wowstatic
+        STATIC
+        ${wmosrcs}
+        ${adtsrcs}
+        utility.cpp
+        wdt.cpp)
+
+add_library(wow
+        MODULE
+        ${wmosrcs}
+        ${adtsrcs}
+        utility.cpp
+        wdt.cpp
+        )
+target_link_libraries(wow ${Boost_LIBRARIES} ${GLOG_LIBRARY})
+
+
 add_executable(wmotest
   file/local_file.cpp
   utility.cpp

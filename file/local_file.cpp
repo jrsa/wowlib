@@ -1,4 +1,6 @@
 #include <glog/logging.h>
+#define BOOST_FILESYSTEM_NO_DEPRECATED
+#include <boost/filesystem.hpp>
 #include "local_file.hpp"
 
 local_file::local_file() {}

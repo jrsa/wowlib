@@ -15,7 +15,7 @@ local_file::local_file(std::string fn) {
 
     LOG(INFO) << "[" << _stripped << "] opened";
   } else if (std::ios::failbit) {
-    LOG(ERROR) << "[" << fn << "] couldnt be opened";
+    LOG(FATAL) << "[" << fn << "] couldnt be opened";
   }
 }
 

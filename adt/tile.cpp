@@ -139,9 +139,8 @@ std::vector<chunk>::iterator tile::first_chunk() { return _chunks.begin(); }
 
 std::vector<chunk>::iterator tile::last_chunk() { return _chunks.end(); }
 
-std::vector<std::string> tile::map_object_names() { return _map_object_names; }
-
-std::vector<std::string> tile::doodad_names() { return _doodad_names; }
-
 std::vector<std::string>::iterator tile::begin_doodad_name() { return _doodad_names.begin(); }
 std::vector<std::string>::iterator tile::end_doodad_name() { return _doodad_names.end(); }
+
+std::vector<std::string>::iterator tile::begin_object_name() { return _map_object_names.begin(); }
+std::vector<std::string>::iterator tile::end_object_name() { return _map_object_names.end(); }

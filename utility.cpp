@@ -18,7 +18,10 @@ void utility::parse_strings(char *data, int size, vector<string> &strings) {
 }
 
 string utility::cc_as_str(int cc) {
-  static char x[5] = {'\0','\0','\0','\0','\0'};
-  memcpy(x, &cc, 4);
-  return string(x, 4);
+  char x[5] = {0,};
+
+  for (int i = 0; i <= 3; i++)
+    x[i] = (cc >> ((3 - i) * 8)) & 0xff;
+
+  return string(x);
 }

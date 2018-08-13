@@ -18,7 +18,7 @@ tile::~tile() {
   delete _doodads;
 
   // TODO: why is this broken (crashes with memory error here)
-  // delete _map_objects;
+  delete _map_objects;
 }
 
 void tile::load(file &f, ADT_FILETYPE type) {

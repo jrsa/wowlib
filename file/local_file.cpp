@@ -9,7 +9,7 @@ local_file::local_file(std::string fn) {
 
   _path = fn;
   _stripped = boost::filesystem::path(fn).filename().string();
-  _f_stream = std::fstream(fn, std::ios_base::in | std::ios::out);
+  _f_stream = std::fstream(fn, std::fstream::in);
 
   if (this->is_open()) {
 

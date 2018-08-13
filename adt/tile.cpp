@@ -54,7 +54,6 @@ void tile::load(file &f, ADT_FILETYPE type) {
 
     switch (magic) {
     case IFF_A_MDXFILES:
-      LOG(INFO) << "  loading..." << std::endl;
 
       buffer = new char[size];
       f.read(buffer, size);
@@ -65,7 +64,6 @@ void tile::load(file &f, ADT_FILETYPE type) {
       break;
 
     case IFF_A_WMOFILES:
-      LOG(INFO) << "  loading..." << std::endl;
       buffer = new char[size];
       f.read(buffer, size);
 
@@ -75,7 +73,6 @@ void tile::load(file &f, ADT_FILETYPE type) {
       break;
 
     case IFF_A_DOODDEF:
-      LOG(INFO) << "  loading..." << std::endl;
       _doodad_count = size / sizeof(SMODoodadDef);
       buffer = (char *)new SMODoodadDef[_doodad_count];
       f.read(buffer, size);
@@ -84,7 +81,6 @@ void tile::load(file &f, ADT_FILETYPE type) {
       break;
 
     case IFF_A_MAPOBJDEF:
-      LOG(INFO) << "  loading..." << std::endl;
       _map_obj_count = size / sizeof(SMOMapObjDef);
       buffer = (char *)new SMOMapObjDef[_map_obj_count];
       f.read(buffer, size);
@@ -93,20 +89,11 @@ void tile::load(file &f, ADT_FILETYPE type) {
       break;
 
     case IFF_A_CHUNK:
-      LOG(INFO) << "  loading chunks..." << std::endl;
-      for (int i = 0; i < 255; ++i) {
-        _chunks.push_back(chunk(f, size, type));
-        f.read(&magic, 4);
-        f.read(&size, 4);
-      }
-
-      f.read(&magic, 4);
-      f.read(&size, 4);
-
+      _chunks.push_back(chunk(f, size, type));
       break;
 
     default:
-
+      LOG(INFO) << " unhandled chunk: " << utility::cc_as_str(magic);
       f.seek_from_current(size);
       break;
     }

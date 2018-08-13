@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 
 #include "chunk.hpp"
 #include "format.h"
@@ -51,6 +52,9 @@ private:
 
   SMOMapObjDef *_map_objects;
   int _map_obj_count;
+
+  std::map<unsigned int, std::vector<char>> _unhandled_chunks;
+
 };
 }
 }

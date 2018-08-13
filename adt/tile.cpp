@@ -94,7 +94,10 @@ void tile::load(file &f, ADT_FILETYPE type) {
 
     default:
       LOG(INFO) << " unhandled chunk: " << utility::cc_as_str(magic);
-      f.seek_from_current(size);
+      buffer = new char[size];
+      f.read(buffer, size);
+      _unhandled_chunks[magic] = std::vector<char>(buffer, &buffer[size]);
+      delete[] buffer;
       break;
     }
   }

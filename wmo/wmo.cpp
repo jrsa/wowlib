@@ -43,8 +43,11 @@ void wmo::load(file &f) {
   }
 
   // read data sections
-  while (!f.eof()) {
-    f.read(&token, 4);
+  while (true) {
+    if (!f.read(&token, 4)) {
+      break;
+    }
+
     f.read(&size, 4);
 
     switch (token) {

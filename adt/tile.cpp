@@ -85,9 +85,9 @@ void tile::load(file &f, ADT_FILETYPE type) {
 
     case IFF_A_MAPOBJDEF:
       LOG(INFO) << "  loading..." << std::endl;
+      _map_obj_count = size / sizeof(SMOMapObjDef);
       buffer = (char *)new SMOMapObjDef[_map_obj_count];
       f.read(buffer, size);
-      _map_obj_count = size / sizeof(SMOMapObjDef);
       _map_objects = (SMOMapObjDef *)buffer;
 
       break;

@@ -36,8 +36,6 @@ public:
 
 private:
   ADT_FILETYPE _loaded_files_mask;
-  std::string _name;
-
   int _x, _y;
 
   std::vector<std::string> _doodad_names;

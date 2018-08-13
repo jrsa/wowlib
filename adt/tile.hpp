@@ -27,6 +27,10 @@ public:
   std::vector<std::string> map_object_names();
   std::vector<std::string> doodad_names();
 
+  std::vector<std::string>::iterator begin_doodad_name();
+  std::vector<std::string>::iterator end_doodad_name();
+
+
 private:
   ADT_FILETYPE _loaded_files_mask;
   std::string _name;

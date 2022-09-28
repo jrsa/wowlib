@@ -1,7 +1,7 @@
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.0)
 project(wowlib)
 
-set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
+set(CMAKE_CXX_FLAGS "-std=c++17 -stdlib=libc++")
 
 FIND_PACKAGE(Boost COMPONENTS filesystem system REQUIRED)
 

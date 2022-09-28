@@ -2,6 +2,9 @@
 
 #include <glog/logging.h>
 #include <string>
+#include <iostream>
+
+#include <nanobench.h>
 
 #define BOOST_FILESYSTEM_NO_DEPRECATED
 #include <boost/filesystem.hpp>
@@ -26,13 +29,12 @@ int main(int argc, char const *argv[]) {
 //  [panel runModal];
 //
 //  path mappath(panel.URLs[0].fileSystemRepresentation);
-  path mappath("/Users/jrsa/wow/wowassets/wotlk/World/Maps/Azeroth");
+  path mappath("/Volumes/data/wow/wowassets/vanilla/World/Maps/EmeraldDream");
   path wdtpath(mappath);
   
   std::string map_name(mappath.filename().string());
   
   std::string wdtname(map_name + ".wdt");
-  //wdtpath /= map_name;
   wdtpath /= wdtname;
 
   // load wdt lol
@@ -40,15 +42,21 @@ int main(int argc, char const *argv[]) {
   local_file wdtfile(wdtpath.string());
   wowlib::wdt map(wdtfile);
 
+  auto i = map.tiles_present.begin();
 
-  int x_index(32);
-  int y_index(48);
-
-  tile t1(map_name, x_index, y_index);
-
-  path base(filename(mappath, map_name, x_index, y_index, ADT_BASE_FILE));
+  ankerl::nanobench::Bench().epochs(map.tiles_present.size()).run("load all tiles", [&] {
     
-  local_file t1_base(base.string());
-  t1.load(t1_base, ADT_BASE_FILE);
+    auto [x_index, y_index] = *i++;
+    // auto [x_index, y_index] = map.tiles_present[i];
+      tile t1(map_name, x_index, y_index);
+      path base(filename(mappath, map_name, x_index, y_index, ADT_BASE_FILE));
+      local_file t1_base(base.string());
+      t1.load(t1_base, ADT_BASE_FILE);
+
+      // for (auto &name: t1._doodad_names)
+      //   std::cout << name << '\n';
+
+  });
+
   return (0);
 }

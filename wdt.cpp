@@ -43,7 +43,7 @@ wdt::wdt(file &f) {
 
       for (int i = 0; i <= 63; ++i) {
         for (int j = 0; j <= 63; ++j) {
-          int tile_idx = (i * 64) + j;
+          int tile_idx = (j * 64) + i;
           if (tile_present(tiles[tile_idx])) {
             tiles_present.push_back(std::make_pair(i, j));
           }

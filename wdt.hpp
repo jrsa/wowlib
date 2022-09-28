@@ -7,10 +7,11 @@
 
 #define WDT_SIZE 4096
 #define IFF_WDTMAIN 'MAIN'
+#define IFF_WDTWMO 'MWMO'
 
 namespace wowlib {
 class wdt {
-private:
+public:
   std::vector<std::pair<int, int> > tiles_present;
 
 public:

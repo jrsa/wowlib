@@ -35,7 +35,8 @@ public:
   std::vector<std::string>::iterator end_object_name();
 
 
-private:
+//private:
+public: /// XXX how should these be exposed? dont want them modified ever
   ADT_FILETYPE _loaded_files_mask;
   int _x, _y;
 

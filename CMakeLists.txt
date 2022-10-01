@@ -7,6 +7,8 @@ FIND_PACKAGE(Boost COMPONENTS filesystem system REQUIRED)
 
 set(GLOG_LIBRARY "/usr/local/opt/glog/lib/libglog.dylib")
 
+add_compile_definitions(GOOGLE_STRIP_LOG=1)
+
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${Boost_INCLUDE_DIRS}

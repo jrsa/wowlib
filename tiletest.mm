@@ -4,8 +4,6 @@
 #include <string>
 #include <iostream>
 
-#include <nanobench.h>
-
 #define BOOST_FILESYSTEM_NO_DEPRECATED
 #include <boost/filesystem.hpp>
 
@@ -42,21 +40,23 @@ int main(int argc, char const *argv[]) {
   local_file wdtfile(wdtpath.string());
   wowlib::wdt map(wdtfile);
 
-  auto i = map.tiles_present.begin();
+  bool single = false;
 
-  ankerl::nanobench::Bench().epochs(map.tiles_present.size()).run("load all tiles", [&] {
-    
-    auto [x_index, y_index] = *i++;
-    // auto [x_index, y_index] = map.tiles_present[i];
+  for (auto [x_index, y_index]: map.tiles_present) {
       tile t1(map_name, x_index, y_index);
       path base(filename(mappath, map_name, x_index, y_index, ADT_BASE_FILE));
       local_file t1_base(base.string());
+
+      // continue;
+
       t1.load(t1_base, ADT_BASE_FILE);
 
       // for (auto &name: t1._doodad_names)
       //   std::cout << name << '\n';
 
-  });
+      // if (single) 
+      //   break;
+  }
 
   return (0);
 }

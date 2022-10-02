@@ -88,4 +88,6 @@ void group::load(file &f) {
 
 std::string group::name() const { return _name; }
 
+uint32_t group::flags() const { return _mogi_flags; }
+
 void group::setName(std::string s) { _name = std::string(s); }

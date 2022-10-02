@@ -155,10 +155,10 @@ void wmo::load(file &f) {
   delete hdr;
 }
 
-std::string wmo::group_filename(int g) {
+std::string group_filename(int g) {
 
   std::stringstream ss;
-  ss << _base_name << "_" << std::setw(3) << std::setfill('0') << g << ".wmo";
+  ss << "_" << std::setw(3) << std::setfill('0') << g << ".wmo";
 
   return ss.str();
 }

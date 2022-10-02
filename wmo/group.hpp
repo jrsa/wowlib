@@ -37,6 +37,8 @@ public:
 
   std::string name() const;
   void setName(std::string);
+
+  uint32_t flags() const;
 };
 
 #endif /* defined(__wmotool__group__) */

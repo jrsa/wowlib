@@ -10,6 +10,9 @@
 
 typedef std::vector<group>::iterator group_itr;
 
+// helper to get filenames for each group
+std::string group_filename(int g);
+
 class material {
 private:
 public:
@@ -40,9 +43,6 @@ public:
   group_itr last_group();
 
   std::string _base_name;
-
-  // helper to get filenames for each group
-  std::string group_filename(int g);
 
   static void process_filenames(std::string name, std::string &base,
                                 std::string &path);

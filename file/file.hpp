@@ -11,11 +11,12 @@ protected:
   std::string _path;
 
 public:
-  virtual int read(void *dest, size_t size) = 0;
-  virtual int write(void *src, size_t size) = 0;
+  virtual int read(char *dest, size_t size) = 0;
+  virtual int write(char *src, size_t size) = 0;
 
   virtual void seek_from_beg(size_t) = 0;
   virtual void seek_from_current(size_t) = 0;
+  virtual void seek_end() = 0;
 
   virtual bool is_open() = 0;
   virtual bool eof() = 0;

@@ -19,12 +19,13 @@ public:
 
   local_file &operator=(const local_file &rhs);
 
-  int read(void *dest, size_t);
-  int write(void *src, size_t);
+  int read(char *dest, size_t);
+  int write(char *src, size_t);
   int position();
 
   void seek_from_beg(size_t);
   void seek_from_current(size_t);
+  void seek_end();
 
   std::string path() { return _stripped; }
 

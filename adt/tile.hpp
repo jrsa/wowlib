@@ -56,6 +56,8 @@ public: /// XXX how should these be exposed? dont want them modified ever
 
   std::map<unsigned int, std::vector<char>> _unhandled_chunks;
 
+  std::vector<char> file_contents_;
+
 };
 }
 }

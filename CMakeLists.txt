@@ -33,8 +33,17 @@ add_executable(tiletest
   tiletest.mm
   )
 
+add_executable(tiletest2
+  file/local_file.cpp
+  utility.cpp
+  ${adtsrcs}
+  wdt.cpp
+  tiletest2.cpp
+  )
+
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -framework AppKit")
 target_link_libraries(tiletest ${Boost_LIBRARIES} ${GLOG_LIBRARY})
+target_link_libraries(tiletest2 ${Boost_LIBRARIES} ${GLOG_LIBRARY})
 
 add_library(wowstatic
         STATIC

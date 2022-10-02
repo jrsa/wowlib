@@ -34,7 +34,7 @@ local_file::~local_file() {
   LOG(INFO) << "[" << _stripped << "] closed";
 }
 
-int local_file::read(void *dest, size_t length) {
+int local_file::read(char *dest, size_t length) {
 
   if (_f_stream && _f_stream.is_open()) {
 
@@ -45,16 +45,16 @@ int local_file::read(void *dest, size_t length) {
 
     LOG(INFO) << "[" << _stripped << "] reading " << length << "b from "
               << _f_stream.tellg();
-    _f_stream.read((char *)dest, length);
+    _f_stream.read(dest, length);
     return (int)length;
   }
 
   return 0;
 }
 
-int local_file::write(void *src, size_t size) {
+int local_file::write(char *src, size_t size) {
 
-  _f_stream.write((char *)src, size);
+  _f_stream.write(src, size);
 
   return 0;
 }
@@ -70,6 +70,10 @@ void local_file::seek_from_current(size_t s) {
 void local_file::seek_from_beg(size_t s) {
   LOG(INFO) << "[" << _stripped << "] seek from 0: " << s;
   _f_stream.seekg(s, std::ios::beg);
+}
+
+void local_file::seek_end() {
+  _f_stream.seekg(0, std::ios::end);
 }
 
 bool local_file::eof() { return _f_stream.eof(); }

@@ -45,8 +45,10 @@ void adt::chunk::load(file &f, int size, ADT_FILETYPE type) {
   }
 
   while (sub_idx < size) {
-    f.read(&sub_magic, 4);
-    f.read(&sub_size, 4);
+    // all the casting to char is kinda whack but im gonna rewrite this anyway
+    // now i remember why i made it void* :)
+    f.read((char *) &sub_magic, 4);
+    f.read((char *) &sub_size, 4);
     sub_idx += (sub_size + 8);
 
     LOG(INFO) << "found " << utility::cc_as_str(sub_magic) << " with size "

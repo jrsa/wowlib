@@ -1,6 +1,3 @@
-//#include <Cocoa/Cocoa.h>
-
-#include <glog/logging.h>
 #include <string>
 #include <iostream>
 
@@ -16,18 +13,7 @@ using namespace wowlib::adt;
 using namespace boost::filesystem;
 
 int main(int argc, char const *argv[]) {
-  FLAGS_log_dir = ".";
-  google::InitGoogleLogging(argv[0]);
-
-//  NSOpenPanel* panel = [NSOpenPanel openPanel];
-//
-//  panel.message = @"select a map folder";
-//  panel.canChooseDirectories = YES;
-//  panel.canChooseFiles = NO;
-//  [panel runModal];
-//
-//  path mappath(panel.URLs[0].fileSystemRepresentation);
-  path mappath("/Volumes/data/wow/wowassets/vanilla/World/Maps/EmeraldDream");
+  path mappath("/Volumes/data/wow/wowassets/vanilla/World/Maps/Azeroth");
   path wdtpath(mappath);
   
   std::string map_name(mappath.filename().string());
@@ -35,30 +21,14 @@ int main(int argc, char const *argv[]) {
   std::string wdtname(map_name + ".wdt");
   wdtpath /= wdtname;
 
-  // load wdt lol
-  // check if terrain exists
   local_file wdtfile(wdtpath.string());
   wowlib::wdt map(wdtfile);
-
-  bool single = false;
 
   for (auto [x_index, y_index]: map.tiles_present) {
     tile t1(map_name, x_index, y_index);
     path base(filename(mappath, map_name, x_index, y_index, ADT_BASE_FILE));
     local_file t1_base(base.string());
-
-
-    std::cout << base.string() << '\n';
-
-    // continue;
-
-    // t1.load(t1_base, ADT_BASE_FILE);
-
-    // for (auto &name: t1._doodad_names)
-    //   std::cout << name << '\n';
-
-    // if (single) 
-    //   break;
+    t1.load(t1_base, ADT_BASE_FILE);
   }
 
   return (0);

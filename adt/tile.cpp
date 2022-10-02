@@ -2,6 +2,7 @@
 #include "../file/file.hpp"
 #include "../utility.hpp"
 
+#include <iostream>
 #include <glog/logging.h>
 
 using namespace wowlib::adt;
@@ -15,89 +16,72 @@ tile::tile(std::string name, int x, int y)
       _map_objects(nullptr), _map_obj_count(0) {}
 
 tile::~tile() {
-  delete _doodads;
-
-  // TODO: why is this broken (crashes with memory error here)
-  delete _map_objects;
 }
 
 void tile::load(file &f, ADT_FILETYPE type) {
 
-  int magic = 0;
-  int size = 0;
-  char *buffer = 0;
-  int version = 0;
-
+  f.seek_end();
+  auto size = f.position();
   f.seek_from_beg(0);
 
-  f.read(&magic, 4);
-  f.read(&size, 4);
-  f.read(&version, 4);
+  // loop through file chunk map
+  // "file chunks" are like MHDR, MWMO, etc
+  // "map chunks" are MCNKs
 
-  if (!f.is_open()) {
-    LOG(FATAL) << "tried to load tile from unopened file " << f.path();
+  file_contents_ = std::vector<char> (size);
+  file_contents_.reserve(size);
+  f.read((char *) &file_contents_[0], size);
+
+  std::multimap< uint32_t, std::vector<char> > file_chunks;
+  
+  size_t file_chunk_offset = 0;
+  while (file_chunk_offset < size)
+  {
+    uint32_t token = * (uint32_t*) &file_contents_[file_chunk_offset];
+    uint32_t file_chunk_size = * (uint32_t*) &file_contents_[file_chunk_offset + 4];
+    file_chunks.insert({token, std::vector<char> (&file_contents_[file_chunk_offset + 8], &file_contents_[file_chunk_offset + file_chunk_size + 8])});
+    file_chunk_offset += (file_chunk_size + 8);
   }
 
-  if (magic != IFFC_VERSION || size != 0x4 || version != 0x12) {
-    LOG(FATAL) << "invalid adt hdr: " << utility::cc_as_str(magic) << ", "
-               << version;
-  }
+  for (auto& [iff_token, data] : file_chunks) {
+    auto size = data.size();
 
-  while (true) {
-    if (!f.read(&magic, 4)) {
+    // std::cout << utility::cc_as_str(iff_token) << '\n';
+
+    switch (iff_token) {
+    case IFFC_VERSION:
+      // assert (version == 0x12);
+      // std::cout << (int)data[0] << '\n';
       break;
-    }
 
-    f.read(&size, 4);
-
-    LOG(INFO) << "found " << utility::cc_as_str(magic) << " with size " << size;
-
-    switch (magic) {
     case IFF_A_MDXFILES:
-
-      buffer = new char[size];
-      f.read(buffer, size);
-
-      utility::parse_strings(buffer, size, _doodad_names);
-      delete[] buffer;
-
+      // parse strings is const? should be (dont modify data ever)
+      // utility::parse_strings(data, _doodad_names);
       break;
 
     case IFF_A_WMOFILES:
-      buffer = new char[size];
-      f.read(buffer, size);
-
-      utility::parse_strings(buffer, size, _map_object_names);
-      delete[] buffer;
-
+      // utility::parse_strings(data, _map_object_names);
       break;
 
     case IFF_A_DOODDEF:
-      _doodad_count = size / sizeof(SMODoodadDef);
-      buffer = (char *)new SMODoodadDef[_doodad_count];
-      f.read(buffer, size);
-      _doodads = (SMODoodadDef *)buffer;
+      _doodad_count = data.size() / sizeof(SMODoodadDef);
+      // std::cout << _doodad_count << ' ' << data.size() << '\n';
+      _doodads = (SMODoodadDef *) &data[0];
 
       break;
 
     case IFF_A_MAPOBJDEF:
-      _map_obj_count = size / sizeof(SMOMapObjDef);
-      buffer = (char *)new SMOMapObjDef[_map_obj_count];
-      f.read(buffer, size);
-      _map_objects = (SMOMapObjDef *)buffer;
+      _map_obj_count = data.size() / sizeof(SMOMapObjDef);
+      _map_objects = (SMOMapObjDef *) &data[0];
 
       break;
 
     case IFF_A_CHUNK:
-      _chunks.push_back(chunk(f, size, type));
+      // _chunks.push_back(chunk(f, size, type));
       break;
 
     default:
-      LOG(INFO) << " unhandled chunk: " << utility::cc_as_str(magic);
-      buffer = new char[size];
-      f.read(buffer, size);
-      _unhandled_chunks[magic] = std::vector<char>(buffer, &buffer[size]);
-      delete[] buffer;
+      _unhandled_chunks[iff_token] = data;
       break;
     }
   }

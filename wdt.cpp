@@ -45,7 +45,7 @@ wdt::wdt(file &f) {
         for (int j = 0; j <= 63; ++j) {
           int tile_idx = (i * 64) + j;
           if (tile_present(tiles[tile_idx])) {
-            tiles_present.push_back(std::make_pair(i, j));
+            _tiles_present.push_back(std::make_pair(j, i));
           }
         }
       }
@@ -61,4 +61,14 @@ wdt::wdt(file &f) {
 }
 
 wdt::~wdt() {}
+
+bool wdt::check_tile(int x, int y) {
+    
+    // for (auto tp : _tiles_present)
+    //     LOG(INFO) << " I HAS " << tp.first << " " << tp.second;
+
+    return std::find(_tiles_present.begin(), _tiles_present.end(), std::make_pair(x, y)) != _tiles_present.end();
 }
+
+}
+

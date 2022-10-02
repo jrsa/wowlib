@@ -41,8 +41,13 @@ int main(int argc, char const *argv[]) {
   wowlib::wdt map(wdtfile);
 
 
+
   int x_index(32);
   int y_index(48);
+
+  if (!map.check_tile(x_index, y_index)) {
+    LOG(FATAL) << map_name << " " << x_index << " " << y_index << "not found dog";
+  }
 
   tile t1(map_name, x_index, y_index);
 

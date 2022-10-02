@@ -11,12 +11,14 @@
 
 namespace wowlib {
 class wdt {
-public:
-  std::vector<std::pair<int, int> > tiles_present;
 
 public:
   wdt(file &f);
   ~wdt();
+    
+  std::vector<std::pair<int, int> > tiles_present;
+
+  bool check_tile(int x, int y);
 };
 }
 

@@ -18,23 +18,25 @@ int main(int argc, char const *argv[]) {
   if (argc == 2) {
     wmopath = path(argv[1]);
   } else {
-    wmopath =
-        path("/Volumes/data/wow/wowassets/wotlk/World/wmo/Azeroth/Buildings/Stormwind/Stormwind.wmo");
-        // path("/Users/jrsa/wow/wowassets/wotlk/World/wmo/Dungeon/AZ_Karazahn/Kharazan.wmo");
+    std::cerr << "usage: " << argv[0] << " <wmo root filename>\n";
+    return -1;
   }
 
+  path basename = wmopath.stem();
+  path directory = wmopath.parent_path();
 
-  std::string basename = wmopath.stem().string();
-
-  local_file root_file( wmopath.string() );
   wmo object;
-
-  object.load( root_file );
+  object.load(local_file(wmopath.string()));
 
   int i = 0;
   for( group_itr g = object.first_group(); g != object.last_group(); ++g ) {
-    std::cout << g->name() << " loaded, flags: " << g->flags() << ", ";
-    std::cout << basename << group_filename(i++) << std::endl;
+    std::cout << g->name() << '\t' << std::hex << g->flags() << '\n';
+    path group_fn = directory / path(basename.string() + group_filename(i++));
+
+    if (0) {
+      local_file group_file(group_fn.string());
+      object.load_group(i, group_file);
+    }
   }
 
   return 0;

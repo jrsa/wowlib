@@ -37,17 +37,17 @@ void group::load(file &f) {
 
   f.seek_from_beg(0);
 
-  f.read(&token, 4);
-  f.read(&size, 4);
-  f.read(&version, 4);
+  f.read((char*)&token, 4);
+  f.read((char*)&size, 4);
+  f.read((char*)&version, 4);
 
   if (token != 'MVER') {
 
     throw std::logic_error("");
   }
 
-  f.read(&token, 4);
-  f.read(&size, 4);
+  f.read((char*)&token, 4);
+  f.read((char*)&size, 4);
 
   if (token != WMO_GROUP) {
 
@@ -55,20 +55,20 @@ void group::load(file &f) {
   }
 
   hdr = new group_header;
-  f.read(hdr, sizeof(group_header));
+  f.read((char*)hdr, sizeof(group_header));
 
   _name_idx = hdr->name_idx;
   _mogi_flags = hdr->flags;
 
   while (!f.eof()) {
-    f.read(&token, 4);
-    f.read(&size, 4);
+    f.read((char*)&token, 4);
+    f.read((char*)&size, 4);
 
     switch (token) {
     case GRP_VERTICES: {
 
       _geometry = (float *)new char[size];
-      f.read(_geometry, size);
+      f.read((char*)_geometry, size);
 
       break;
     }
@@ -76,7 +76,7 @@ void group::load(file &f) {
     case GRP_MATINFO: {
 
       _polygon_flags = (poly_flags *)new char[size];
-      f.read(_polygon_flags, size);
+      f.read((char*)_polygon_flags, size);
 
       break;
     }

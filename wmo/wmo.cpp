@@ -28,9 +28,9 @@ void wmo::load(file &f) {
 
   f.seek_from_beg(0);
 
-  f.read(&token, 4);
-  f.read(&size, 4);
-  f.read(&version, 4);
+  f.read((char*) &token, 4);
+  f.read((char*) &size, 4);
+  f.read((char*) &version, 4);
 
   // version check
   if (token != 'MVER') {
@@ -44,11 +44,11 @@ void wmo::load(file &f) {
 
   // read data sections
   while (true) {
-    if (!f.read(&token, 4)) {
+    if (!f.read((char*)&token, 4)) {
       break;
     }
 
-    f.read(&size, 4);
+    f.read((char*)&size, 4);
 
     switch (token) {
     case WMO_HEADER: {
@@ -58,7 +58,7 @@ void wmo::load(file &f) {
       }
 
       hdr = new wmo_header;
-      f.read(hdr, sizeof(wmo_header));
+      f.read((char*)hdr, sizeof(wmo_header));
 
       LOG(INFO) << hdr->group_count << " groups";
       LOG(INFO) << hdr->mat_count << " materials";
@@ -73,7 +73,7 @@ void wmo::load(file &f) {
       if (size) {
         char *name = new char[size];
 
-        f.read(name, size);
+        f.read((char*)name, size);
         skybox_filename = std::string(name);
 
         delete[] name;
@@ -82,7 +82,7 @@ void wmo::load(file &f) {
     }
     case WMO_GROUPNAME: {
       char *data = new char[size];
-      f.read(data, size);
+      f.read((char*)data, size);
 
       utility::parse_strings(data, size, groupnames);
 
@@ -92,7 +92,7 @@ void wmo::load(file &f) {
     }
     case WMO_TEXFILES: {
       char *data = new char[size];
-      f.read(data, size);
+      f.read((char*)data, size);
 
       utility::parse_strings(data, size, texture_filenames);
 
@@ -112,7 +112,7 @@ void wmo::load(file &f) {
       }
 
       material_entry *data = new material_entry[hdr->mat_count];
-      f.read(data, size);
+      f.read((char*)data, size);
 
       for (int i = 0; i < hdr->mat_count; i++) {
         _materials.push_back(material(data[i]));
@@ -134,7 +134,7 @@ void wmo::load(file &f) {
       }
 
       group_info *data = new group_info[hdr->group_count];
-      f.read(data, size);
+      f.read((char*)data, size);
 
       for (int i = 0; i < hdr->group_count; i++) {
         group_info gi = data[i];
@@ -163,7 +163,7 @@ std::string group_filename(int g) {
   return ss.str();
 }
 
-group &wmo::load_group(int index, file &f) {
+group& wmo::load_group(int index, file &f) {
 
   if (index > _groups.size()) {
 
@@ -171,10 +171,6 @@ group &wmo::load_group(int index, file &f) {
   }
 
   _groups[index].load(f);
-
-  // dont think this is really correct..
-  _groups[index].setName(groupnames[index]);
-
   return _groups[index];
 }
 

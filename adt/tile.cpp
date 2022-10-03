@@ -29,10 +29,14 @@ void tile::load(file &f, ADT_FILETYPE type) {
   // "file chunks" are like MHDR, MWMO, etc
   // "map chunks" are MCNKs
 
+  // this takes ~20ms, which adds up when loading big maps ------------------------- 
+  // how much of that is i/o and how much is allocating memory?
   file_contents_ = std::vector<char> (size);
   file_contents_.reserve(size);
   f.read((char *) &file_contents_[0], size);
+  //-------------------------------------------------------------------------------- 
 
+  // by my very rough calculations this part takes ~8ms
   std::multimap< uint32_t, std::vector<char> > file_chunks;
   
   size_t file_chunk_offset = 0;
@@ -43,6 +47,7 @@ void tile::load(file &f, ADT_FILETYPE type) {
     file_chunks.insert({token, std::vector<char> (&file_contents_[file_chunk_offset + 8], &file_contents_[file_chunk_offset + file_chunk_size + 8])});
     file_chunk_offset += (file_chunk_size + 8);
   }
+  //-------------------------------------------------------------------------------- 
 
   for (auto& [iff_token, data] : file_chunks) {
     // std::cout << utility::cc_as_str(iff_token) << '\n';

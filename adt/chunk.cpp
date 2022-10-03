@@ -27,7 +27,9 @@ adt::chunk::chunk() {}
 
 adt::chunk::chunk(std::vector<char> data, ADT_FILETYPE type) { load(data, type); }
 
-void adt::chunk::load(std::vector<char> data, ADT_FILETYPE type) {
+// NOTE for the future: making this a const reference instead of "non const pass by value"
+// shaved 7 seconds off loading the entire Azeroth map, roughly 9ms per tile!
+void adt::chunk::load(const std::vector<char> &data, ADT_FILETYPE type) {
 
   int sub_magic = 0;
   int sub_size = 0;

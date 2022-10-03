@@ -15,7 +15,7 @@ public:
   chunk();
   chunk(std::vector<char>, ADT_FILETYPE);
 
-  void load(std::vector<char>, ADT_FILETYPE);
+  void load(const std::vector<char> &, ADT_FILETYPE);
   void parse_header(SMChunkHeader *hdr);
   void save(file &f, ADT_FILETYPE) const;
 

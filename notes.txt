@@ -1,0 +1,33 @@
+starting out.. oof
+  
+________________________________________________________
+Executed in   36.17 secs    fish           external
+   usr time   33.86 secs   87.00 micros   33.86 secs
+   sys time    2.18 secs  448.00 micros    2.18 secs
+
+skipping adt::tile::load
+  ________________________________________________________
+Executed in   19.53 millis    fish           external
+   usr time   12.92 millis   62.00 micros   12.86 millis
+   sys time    5.59 millis  395.00 micros    5.19 millis
+
+
+case IFF_A_CHUNK:
+  // REPLACING THIS
+  // _chunks.push_back(chunk(f, size, type));
+  // WITH THIS
+  f.seek_from_current(size);
+  break;
+
+  ________________________________________________________
+  Executed in    3.18 secs    fish           external
+     usr time    2.89 secs   75.00 micros    2.89 secs
+     sys time    0.25 secs  431.00 micros    0.25 secs
+
+
+
+compiling with glog completely disabled (via `add_compile_definitions(GOOGLE_STRIP_LOG=1)` in cmake  cuts it down a fair amount (after re-enabling the above stuff)
+  ________________________________________________________
+  Executed in   10.10 secs    fish           external
+     usr time    8.93 secs  124.00 micros    8.93 secs
+     sys time    0.95 secs  640.00 micros    0.95 secs

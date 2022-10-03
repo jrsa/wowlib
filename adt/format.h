@@ -62,7 +62,7 @@ typedef struct {
   uint32_t ofs_mcse;   // write at time of save
   uint32_t count_mcse; // write at time of save
   uint32_t ofs_mclq;   // zero/not used
-  uint32_t count_mclq;
+  uint32_t size_mclq;
   float x, y, z;
   uint32_t ofs_mccv;
   uint32_t ofs_mclv;

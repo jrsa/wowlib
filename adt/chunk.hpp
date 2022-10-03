@@ -13,9 +13,9 @@ namespace adt {
 class chunk {
 public:
   chunk();
-  chunk(file &, int size, ADT_FILETYPE);
+  chunk(std::vector<char>, ADT_FILETYPE);
 
-  void load(file &, int size, ADT_FILETYPE);
+  void load(std::vector<char>, ADT_FILETYPE);
   void parse_header(SMChunkHeader *hdr);
   void save(file &f, ADT_FILETYPE) const;
 

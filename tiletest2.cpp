@@ -13,22 +13,22 @@ using namespace wowlib::adt;
 using namespace boost::filesystem;
 
 int main(int argc, char const *argv[]) {
-  path mappath("/Volumes/data/wow/wowassets/vanilla/World/Maps/Azeroth");
-  path wdtpath(mappath);
+  path map_path(argv[1]);
   
-  std::string map_name(mappath.filename().string());
+  std::string map_name(map_path.filename().string());
   
-  std::string wdtname(map_name + ".wdt");
-  wdtpath /= wdtname;
+  std::string wdt_name(map_name + ".wdt");
+  path wdt_path = map_path / wdt_name;
 
-  local_file wdtfile(wdtpath.string());
-  wowlib::wdt map(wdtfile);
+  local_file wdt_file(wdt_path.string());
+  wowlib::wdt map(wdt_file);
 
   for (auto [x_index, y_index]: map.tiles_present) {
     tile t1(map_name, x_index, y_index);
-    path base(filename(mappath, map_name, x_index, y_index, ADT_BASE_FILE));
+    path base(filename(map_path, map_name, x_index, y_index, ADT_BASE_FILE));
     local_file t1_base(base.string());
     t1.load(t1_base, ADT_BASE_FILE);
+    // break;
   }
 
   return (0);

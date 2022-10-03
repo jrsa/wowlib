@@ -2,6 +2,7 @@
 #include "../file/file.hpp"
 #include "../utility.hpp"
 
+#include <cassert>
 #include <iostream>
 #include <glog/logging.h>
 
@@ -44,23 +45,23 @@ void tile::load(file &f, ADT_FILETYPE type) {
   }
 
   for (auto& [iff_token, data] : file_chunks) {
-    auto size = data.size();
-
     // std::cout << utility::cc_as_str(iff_token) << '\n';
 
     switch (iff_token) {
-    case IFFC_VERSION:
+    case IFFC_VERSION: {
       // assert (version == 0x12);
+      uint32_t version = * (uint32_t*) &data[0];
+      assert (version == 18);
       // std::cout << (int)data[0] << '\n';
       break;
-
+    }
     case IFF_A_MDXFILES:
-      // parse strings is const? should be (dont modify data ever)
-      // utility::parse_strings(data, _doodad_names);
+      // XXX rewrite to just take the char vector directly
+      utility::parse_strings(&data[0], data.size(), _doodad_names);
       break;
 
     case IFF_A_WMOFILES:
-      // utility::parse_strings(data, _map_object_names);
+      utility::parse_strings(&data[0], data.size(), _map_object_names);
       break;
 
     case IFF_A_DOODDEF:
@@ -77,7 +78,7 @@ void tile::load(file &f, ADT_FILETYPE type) {
       break;
 
     case IFF_A_CHUNK:
-      // _chunks.push_back(chunk(f, size, type));
+      _chunks.push_back(chunk(data, type));
       break;
 
     default:
@@ -86,6 +87,11 @@ void tile::load(file &f, ADT_FILETYPE type) {
     }
   }
   _loaded_files_mask = (ADT_FILETYPE)(_loaded_files_mask | type);
+
+  // std::cout << "unhandled chunks: ";
+  // for (auto& [token, data] : _unhandled_chunks)
+  //   std::cout << utility::cc_as_str(token) << " (" << data.size() << " bytes), ";
+  // std::cout << '\n';
 }
 
 void tile::save(file &f, ADT_FILETYPE type) {

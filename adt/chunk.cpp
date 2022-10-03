@@ -1,3 +1,5 @@
+#include <iostream>
+#include <map>
 #include <glog/logging.h>
 
 #include "../file/file.hpp"
@@ -23,76 +25,75 @@ void adt::chunk::parse_header(SMChunkHeader *hdr) {
 
 adt::chunk::chunk() {}
 
-adt::chunk::chunk(file &f, int size, ADT_FILETYPE type) { load(f, size, type); }
+adt::chunk::chunk(std::vector<char> data, ADT_FILETYPE type) { load(data, type); }
 
-void adt::chunk::load(file &f, int size, ADT_FILETYPE type) {
+void adt::chunk::load(std::vector<char> data, ADT_FILETYPE type) {
 
   int sub_magic = 0;
   int sub_size = 0;
-  int sub_idx = 0;
 
   std::vector<int> doodad_ids;
   std::vector<int> object_ids;
 
+  // XXX just make this a data member of the chunk class, i believe tileDocument does exactly that
+  // the "parsing" is just copying individual fields of the header into class data members
+  SMChunkHeader* header = (SMChunkHeader*) &data[0];
   if (type == ADT_BASE_FILE) {
-    SMChunkHeader *header = new SMChunkHeader;
-    f.read((char *)header, sizeof(SMChunkHeader));
     parse_header(header);
-
-    sub_idx += sizeof(SMChunkHeader);
-
-    delete header;
   }
 
-  while (sub_idx < size) {
-    // all the casting to char is kinda whack but im gonna rewrite this anyway
-    // now i remember why i made it void* :)
-    f.read((char *) &sub_magic, 4);
-    f.read((char *) &sub_size, 4);
-    sub_idx += (sub_size + 8);
+  // i straight copied this from adt::tile::load, should maybe make a
+  // std::multimap< uint32_t, std::vector<char> > parse_iff_chunks (std::vector<char>) function somewhere
 
-    LOG(INFO) << "found " << utility::cc_as_str(sub_magic) << " with size "
-              << sub_size << " at offset " << sub_idx << " into chunk " << _ix
-              << ", " << _iy;
+  std::multimap< uint32_t, std::vector<char> > sub_chunks;
+  std::map < uint32_t, uint32_t > size_overrides {
+    { 'MCNR', 448 },
+    { 'MCLQ', header->size_mclq },
+    { 'MCAL', header->alpha_size },
+  };
+  
+  // TODO: for obj0/tex0 files, skip the header
+  size_t sub_chunk_offset = sizeof(SMChunkHeader);
+  while (sub_chunk_offset < data.size())
+  {
+    uint32_t token = * (uint32_t*) &data[sub_chunk_offset];
+    uint32_t sub_chunk_size = * (uint32_t*) &data[sub_chunk_offset + 4];
+
+    if ((sub_chunk_offset + sub_chunk_size) > data.size())
+      break;
+
+    if (auto el = size_overrides.find(token); el != size_overrides.end())
+      sub_chunk_size = el->second;
+
+    sub_chunks.insert({token, std::vector<char> (&data[sub_chunk_offset + 8], &data[sub_chunk_offset + sub_chunk_size + 8])});
+    sub_chunk_offset += (sub_chunk_size + 8);
+  }
+
+  for (auto& [iff_token, data] : sub_chunks) {
+    // std::cout << "MCNK subchunk: " << utility::cc_as_str(iff_token) << ", size: " << data.size() << "b" <<'\n';
 
     switch (sub_magic) {
-    case IFF_A_CHUNK: {
-      LOG(FATAL) << "read past end of MCNK: " << sub_idx << "/" << size;
-    }
+
     case IFF_C_DREF: {
-      int dref_count = sub_size / 4;
-      int *i_drefs = new int[dref_count];
-      f.read((char *)i_drefs, 4 * dref_count);
-      doodad_ids = std::vector<int>(i_drefs, &i_drefs[dref_count]);
-      delete[] i_drefs;
+      doodad_ids = std::vector<int>(&data[0], &data[data.size()]);
       break;
     }
     case IFF_C_WREF: {
-      int wref_count = sub_size / 4;
-      int *i_wrefs = new int[wref_count];
-      f.read((char *)i_wrefs, 4 * wref_count);
-      object_ids = std::vector<int>(i_wrefs, &i_wrefs[wref_count]);
-      delete[] i_wrefs;
+      object_ids = std::vector<int>(&data[0], &data[data.size()]);
       break;
     }
 
     case IFF_C_VERTS: {
-      float *heightmap = new float[C_VERT_COUNT];
-      f.read((char *)heightmap, 4 * C_VERT_COUNT);
-
-      _vertices = std::vector<float>(heightmap, &heightmap[C_VERT_COUNT]);
-
-      delete[] heightmap;
+      _vertices = std::vector<float>(&data[0], &data[C_VERT_COUNT * 4]);
       break;
     }
+    /*
     case IFF_C_NORMs: {
       f.seek_from_current(448);
-      sub_idx += 13;
       break;
     }
+    */
     default: {
-
-      f.seek_from_current(sub_size);
       break;
     }
     }
@@ -101,5 +102,8 @@ void adt::chunk::load(file &f, int size, ADT_FILETYPE type) {
 
 void adt::chunk::save(file &f, ADT_FILETYPE type) const {
   LOG(FATAL) << "adt::chunk::save nyi";
+
+  // write header
+  // write subchunks
 }
 }
